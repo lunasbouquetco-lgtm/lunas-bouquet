@@ -3,15 +3,13 @@ import { ArrowRight, Check } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import PageHeader from '@/components/PageHeader'
 import bloom from '@/assets/bloom.jpg'
+import { HOLIDAY_ARRANGEMENTS } from '@/lib/arrangements'
 
-const holidays = [
-  { name: "Valentine's Day", when: 'Delivered Fri, Feb 13' },
-  { name: 'Easter', when: 'Delivered Fri, Apr 3' },
-  { name: "Mother's Day", when: 'Delivered Fri, May 8' },
-  { name: 'Fourth of July', when: 'Delivered Tue, Jul 2' },
-  { name: 'Thanksgiving', when: 'Delivered Tue, Nov 25' },
-  { name: 'Christmas', when: 'Delivered Tue, Dec 23' },
-]
+// Sourced from arrangements.ts rather than repeated here — this page and the order form
+// drifting apart on delivery dates is exactly the bug worth designing out.
+const holidays = HOLIDAY_ARRANGEMENTS.filter((a) => a.id !== 'monthly-subscription').map(
+  (a) => ({ name: a.label, when: a.delivery })
+)
 
 const included = [
   'A large, hand-tied arrangement',

@@ -67,6 +67,13 @@ create table if not exists public.orders (
   estimated_total       integer not null default 0,
   status                order_status not null default 'new',
   source                text not null default 'website',
+  -- What Annie actually charged and actually collected. The website can only ever
+  -- estimate; these are filled in by hand once she confirms an order, and they are how
+  -- the legacy spreadsheet's payment tracking survives the import.
+  amount_charged        integer,
+  amount_paid           integer,
+  admin_notes           text,          -- "no pinks or purples", "match plates"
+  delivered_on          date,          -- the delivery this order is for, when known
   -- Denormalized copies, written at order time. Annie needs to see the order exactly as
   -- it was placed even if the customer later moves or changes their phone number.
   customer_name         text,
