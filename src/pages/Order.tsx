@@ -7,7 +7,11 @@ import {
   HOLIDAY_ARRANGEMENTS,
   CUSTOM_OPTION,
   ARRANGEMENT_PRICE,
+  ROSE_PRICE,
+  ROSE_COUNT,
   estimateTotal,
+  type Selection,
+  type Size,
 } from '@/lib/arrangements'
 import { submitOrder } from '@/lib/submitOrder'
 
@@ -16,7 +20,9 @@ type Status = 'idle' | 'submitting' | 'success' | 'error'
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function Order() {
-  const [selected, setSelected] = useState<string[]>([])
+  // holiday id -> size. Presence of a key means "selected"; the value is which size.
+  const [selection, setSelection] = useState<Selection>({})
+  const selected = Object.keys(selection)
   const [form, setForm] = useState({
     customerName: '',
     customerPhone: '',
@@ -34,14 +40,21 @@ export default function Order() {
   const [serverError, setServerError] = useState('')
 
   const customSelected = selected.includes(CUSTOM_OPTION.id)
-  const estimate = estimateTotal(selected)
+  const estimate = estimateTotal(selection)
   const seasonalCount = selected.filter((id) => id !== CUSTOM_OPTION.id).length
 
   function toggle(id: string) {
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    )
+    setSelection((prev) => {
+      const next = { ...prev }
+      if (id in next) delete next[id]
+      else next[id] = 'signature' // default to the $125 arrangement
+      return next
+    })
     setErrors((e) => ({ ...e, arrangements: '' }))
+  }
+
+  function setSize(id: string, size: Size) {
+    setSelection((prev) => ({ ...prev, [id]: size }))
   }
 
   function set(field: keyof typeof form, value: string) {
@@ -72,7 +85,7 @@ export default function Order() {
     setServerError('')
     if (!validate()) return
     setStatus('submitting')
-    const res = await submitOrder({ ...form, arrangements: selected })
+    const res = await submitOrder({ ...form, selection })
     if (res.ok) {
       setStatus('success')
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -146,10 +159,12 @@ export default function Order() {
                 {HOLIDAY_ARRANGEMENTS.map((a) => (
                   <OptionCard
                     key={a.id}
-                    checked={selected.includes(a.id)}
+                    checked={a.id in selection}
                     onToggle={() => toggle(a.id)}
                     label={a.label}
                     sub={a.delivery}
+                    size={selection[a.id]}
+                    onSize={(s) => setSize(a.id, s)}
                   />
                 ))}
                 <div className="sm:col-span-2">
@@ -388,19 +403,20 @@ function OptionCard({
   label,
   sub,
   accent,
+  size,
+  onSize,
 }: {
   checked: boolean
   onToggle: () => void
   label: string
   sub: string
   accent?: boolean
+  size?: Size
+  onSize?: (s: Size) => void
 }) {
   return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-pressed={checked}
-      className={`flex w-full items-start gap-3 rounded-sm border px-5 py-4 text-left transition-all duration-300 ${
+    <div
+      className={`rounded-sm border transition-all duration-300 ${
         checked
           ? 'border-rosewood bg-rosewood/8 shadow-[0_10px_30px_-20px_rgba(168,70,90,0.7)]'
           : accent
@@ -408,19 +424,90 @@ function OptionCard({
           : 'border-gold/20 bg-surface hover:border-gold/50'
       }`}
     >
-      <span
-        className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors ${
-          checked ? 'border-rosewood bg-rosewood text-white' : 'border-gold/40 text-transparent'
-        }`}
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-pressed={checked}
+        className="flex w-full items-start gap-3 px-5 py-4 text-left"
       >
-        <Check size={12} />
-      </span>
-      <span>
-        <span className="flex items-center gap-2 font-display text-xl text-plum">
-          {accent && <Flower2 size={16} className="text-gold" />}
-          {label}
+        <span
+          className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors ${
+            checked ? 'border-rosewood bg-rosewood text-white' : 'border-gold/40 text-transparent'
+          }`}
+        >
+          <Check size={12} />
         </span>
-        <span className="mt-0.5 block font-body text-base text-ink/60">{sub}</span>
+        <span>
+          <span className="flex items-center gap-2 font-display text-xl text-plum">
+            {accent && <Flower2 size={16} className="text-gold" />}
+            {label}
+          </span>
+          <span className="mt-0.5 block font-body text-base text-ink/60">{sub}</span>
+        </span>
+      </button>
+
+      {/* The size choice only appears once the holiday is chosen — showing two prices
+          on every unselected card would make the list read as twelve options, not six. */}
+      {/* Stacked, not side by side: these cards sit in a two-column grid, so a row of
+          two chips leaves each about 110px wide and "100 roses" wraps mid-phrase. */}
+      {checked && onSize && (
+        <div className="flex flex-col gap-2 border-t border-rosewood/15 px-5 py-4">
+          <SizeChip
+            active={size !== 'roses'}
+            onClick={() => onSize('signature')}
+            title="Signature"
+            price={`$${ARRANGEMENT_PRICE}`}
+            note="Seasonal blooms"
+          />
+          <SizeChip
+            active={size === 'roses'}
+            onClick={() => onSize('roses')}
+            title={`${ROSE_COUNT} roses`}
+            price={`$${ROSE_PRICE}`}
+            note="Roses only"
+          />
+        </div>
+      )}
+    </div>
+  )
+}
+
+function SizeChip({
+  active,
+  onClick,
+  title,
+  price,
+  note,
+}: {
+  active: boolean
+  onClick: () => void
+  title: string
+  price: string
+  note: string
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`flex flex-1 items-baseline justify-between gap-3 rounded-sm border px-4 py-2.5 text-left transition-colors ${
+        active
+          ? 'border-rosewood bg-surface'
+          : 'border-transparent bg-surface/50 hover:border-gold/30'
+      }`}
+    >
+      <span>
+        <span className={`block font-body text-lg ${active ? 'text-plum' : 'text-ink/60'}`}>
+          {title}
+        </span>
+        <span className="block font-ui text-xs uppercase tracking-[0.14em] text-ink/40">
+          {note}
+        </span>
+      </span>
+      <span
+        className={`font-display text-lg ${active ? 'text-rosewood' : 'text-ink/45'}`}
+      >
+        {price}
       </span>
     </button>
   )

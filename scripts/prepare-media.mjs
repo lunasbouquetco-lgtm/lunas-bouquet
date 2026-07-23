@@ -8,7 +8,7 @@
 // Run: node scripts/prepare-media.mjs
 
 import { execFileSync } from 'node:child_process'
-import { mkdirSync, existsSync, readdirSync, statSync } from 'node:fs'
+import { mkdirSync, existsSync, statSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import ffmpegPath from 'ffmpeg-static'

@@ -1,9 +1,5 @@
 import { supabase } from './supabase'
-import {
-  HOLIDAY_ARRANGEMENTS,
-  CUSTOM_OPTION,
-  estimateTotal,
-} from './arrangements'
+import { describe, estimateTotal, type Selection } from './arrangements'
 
 export type OrderInput = {
   customerName: string
@@ -12,7 +8,7 @@ export type OrderInput = {
   recipientName: string
   recipientAddress: string
   gateCode: string
-  arrangements: string[] // ids
+  selection: Selection // holiday id -> size
   customDetails: string
   cardMessage: string
   deliveryInstructions: string
@@ -20,11 +16,6 @@ export type OrderInput = {
 }
 
 const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY as string | undefined
-
-function labelFor(id: string): string {
-  if (id === CUSTOM_OPTION.id) return CUSTOM_OPTION.label
-  return HOLIDAY_ARRANGEMENTS.find((a) => a.id === id)?.label ?? id
-}
 
 export async function submitOrder(
   input: OrderInput
@@ -34,8 +25,12 @@ export async function submitOrder(
     return { ok: true }
   }
 
-  const arrangementLabels = input.arrangements.map(labelFor)
-  const estimated = estimateTotal(input.arrangements)
+  // Labels carry the size, so Annie's order book reads "Mother's Day — 100 roses"
+  // rather than making her cross-reference a price to know what to build.
+  const arrangementLabels = Object.entries(input.selection).map(([id, size]) =>
+    describe(id, size)
+  )
+  const estimated = estimateTotal(input.selection)
 
   // 1) Store the order in Supabase (source of truth).
   //

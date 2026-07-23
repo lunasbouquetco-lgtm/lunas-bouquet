@@ -4,7 +4,7 @@ import Reveal from '@/components/Reveal'
 import PageHeader from '@/components/PageHeader'
 import Gallery from '@/components/Gallery'
 import bloom from '@/assets/bloom.jpg'
-import { HOLIDAY_ARRANGEMENTS } from '@/lib/arrangements'
+import { HOLIDAY_ARRANGEMENTS, ROSE_PRICE, ROSE_COUNT } from '@/lib/arrangements'
 import { HOLIDAY_MEDIA } from '@/lib/media'
 
 // Sourced from arrangements.ts rather than repeated here — this page and the order form
@@ -89,6 +89,16 @@ export default function Bouquets() {
             <p className="mt-6 rounded-sm bg-champagne/60 px-5 py-4 font-body text-lg text-plum">
               🌸 Order three or more and take <strong>$10 off</strong> each arrangement.
             </p>
+
+            <div className="mt-4 rounded-sm border border-rosewood/25 bg-surface px-5 py-4">
+              <p className="font-display text-xl text-plum">
+                Or {ROSE_COUNT} roses, for any holiday
+              </p>
+              <p className="mt-1 font-display text-lg text-rosewood">${ROSE_PRICE}</p>
+              <p className="mt-2 font-body text-lg text-ink/70">
+                A rose-only arrangement, {ROSE_COUNT} stems, available for every date above.
+              </p>
+            </div>
           </Reveal>
 
           <Reveal delay={0.1}>

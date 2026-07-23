@@ -6,6 +6,17 @@ export const BULK_THRESHOLD = 3 // 3+ arrangements
 export const BULK_DISCOUNT = 10 // $10 off each
 export const CUSTOM_MINIMUM = 375
 
+// A rose-only arrangement, available for any holiday (Christine, 2026-07-23).
+export const ROSE_PRICE = 275
+export const ROSE_COUNT = 100
+
+// Every holiday can be ordered at either size.
+export type Size = 'signature' | 'roses'
+
+// holiday id -> chosen size. The custom/event option has no size, so it maps to
+// 'signature' and is skipped in the maths.
+export type Selection = Record<string, Size>
+
 export type Arrangement = {
   id: string
   label: string
@@ -38,10 +49,29 @@ export const CUSTOM_OPTION: Arrangement = {
 }
 
 // Estimate for the seasonal arrangements only (custom/event is quoted separately).
-export function estimateTotal(selectedIds: string[]): number {
-  const seasonalCount = selectedIds.filter((id) => id !== CUSTOM_OPTION.id).length
-  if (seasonalCount === 0) return 0
+//
+// The 3-for-$10-off deal counts and discounts the $125 signature arrangements only.
+// The $275 rose arrangement is left at full price, because discounting it was never
+// part of the offer and guessing in the customer's favour costs Annie real money.
+export function estimateTotal(selection: Selection): number {
+  const sizes = Object.entries(selection)
+    .filter(([id]) => id !== CUSTOM_OPTION.id)
+    .map(([, size]) => size)
+
+  const signatureCount = sizes.filter((s) => s === 'signature').length
+  const roseCount = sizes.filter((s) => s === 'roses').length
+
   const each =
-    seasonalCount >= BULK_THRESHOLD ? ARRANGEMENT_PRICE - BULK_DISCOUNT : ARRANGEMENT_PRICE
-  return seasonalCount * each
+    signatureCount >= BULK_THRESHOLD ? ARRANGEMENT_PRICE - BULK_DISCOUNT : ARRANGEMENT_PRICE
+
+  return signatureCount * each + roseCount * ROSE_PRICE
+}
+
+// What the order is called on the confirmation email and in Annie's order book.
+export function describe(id: string, size: Size): string {
+  const label = id === CUSTOM_OPTION.id
+    ? CUSTOM_OPTION.label
+    : HOLIDAY_ARRANGEMENTS.find((a) => a.id === id)?.label ?? id
+  if (id === CUSTOM_OPTION.id) return label
+  return size === 'roses' ? `${label} — ${ROSE_COUNT} roses` : label
 }
