@@ -6,12 +6,17 @@ let html = readFileSync('brand-board.html', 'utf8');
 
 const map = {
   __LOGO__: b64('logo-sm.png', 'image/png'),
-  __HERO__: b64('hero-sm.jpg', 'image/jpeg'),
+  __MARK_GOLD__: b64('mark-gold.png', 'image/png'),
+  __MARK_IVORY__: b64('mark-ivory.png', 'image/png'),
+  __HERO__: b64('hero-clean-sm.jpg', 'image/jpeg'),
   __MCQUEEN__: b64('mcqueen-sm.jpg', 'image/jpeg'),
   __F_CORMORANT__: b64('cormorant.woff2', 'font/woff2'),
   __F_CORMORANT6__: b64('cormorant600.woff2', 'font/woff2'),
   __F_PLAYFAIR__: b64('playfair.woff2', 'font/woff2'),
   __F_FRAUNCES__: b64('fraunces.woff2', 'font/woff2'),
+  __F_PRATA__: b64('prata.woff2', 'font/woff2'),
+  __F_MARCELLUS__: b64('marcellus.woff2', 'font/woff2'),
+  __F_DMSERIF__: b64('dmserif.woff2', 'font/woff2'),
   __F_JOST__: b64('jost.woff2', 'font/woff2'),
   __F_JOST5__: b64('jost500.woff2', 'font/woff2'),
 };

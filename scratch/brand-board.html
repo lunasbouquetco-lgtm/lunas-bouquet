@@ -6,6 +6,9 @@
   @font-face{font-family:'Fraunces';src:url(__F_FRAUNCES__) format('woff2');font-weight:600;font-display:swap}
   @font-face{font-family:'Jost';src:url(__F_JOST__) format('woff2');font-weight:400;font-display:swap}
   @font-face{font-family:'Jost';src:url(__F_JOST5__) format('woff2');font-weight:500;font-display:swap}
+  @font-face{font-family:'Prata';src:url(__F_PRATA__) format('woff2');font-weight:400;font-display:swap}
+  @font-face{font-family:'Marcellus';src:url(__F_MARCELLUS__) format('woff2');font-weight:400;font-display:swap}
+  @font-face{font-family:'DMSerif';src:url(__F_DMSERIF__) format('woff2');font-weight:400;font-display:swap}
 
   :root{
     --ivory:#F6F1E7; --champagne:#ECE3D2; --gold:#A97C24; --gold-lt:#C6A24E;
@@ -95,15 +98,13 @@
   .grounds{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
   @media(max-width:640px){.grounds{grid-template-columns:1fr}}
   .gr{aspect-ratio:4/3;border-radius:4px;display:flex;align-items:center;justify-content:center;
-    border:1px solid var(--edge);position:relative}
-  .gr img{width:62%;height:auto}
-  .gr .lb{font-family:var(--display);font-size:2.6rem;font-weight:600;letter-spacing:.04em}
+    border:1px solid var(--edge);position:relative;padding:22px 16px 30px}
+  .gr img{max-width:78%;max-height:74%;height:auto;width:auto}
   .gr span{position:absolute;bottom:10px;left:12px;font-family:var(--ui);font-size:.64rem;
-    letter-spacing:.14em;text-transform:uppercase;opacity:.7}
-  .gr.ivory{background:var(--ivory)} .gr.ivory img{mix-blend-mode:multiply}
-  .gr.ivory span{color:#8a7a63}
-  .gr.plum{background:var(--plum)} .gr.plum .lb{color:var(--gold-lt)} .gr.plum span{color:#c9a}
-  .gr.gold{background:var(--gold)} .gr.gold .lb{color:var(--ivory)} .gr.gold span{color:#f3e6c8}
+    letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+  .gr.ivory{background:var(--ivory)} .gr.ivory span{color:#8a7a63}
+  .gr.plum{background:var(--plum)} .gr.plum span{color:#caa8b6}
+  .gr.gold{background:var(--gold)} .gr.gold span{color:#f6ead0}
 
   /* ---- type specimens ---- */
   .spec{border:1px solid var(--edge);border-radius:6px;background:var(--surface);
@@ -120,6 +121,9 @@
   .spec .sample-cor{font-family:'Cormorant',serif}
   .spec .sample-play{font-family:'Playfair',serif}
   .spec .sample-fr{font-family:'Fraunces',serif}
+  .spec .sample-prata{font-family:'Prata',serif}
+  .spec .sample-mar{font-family:'Marcellus',serif}
+  .spec .sample-dm{font-family:'DMSerif',serif}
   .spec .row{margin-top:14px;font-family:var(--ui);font-size:.82rem;letter-spacing:.28em;
     text-transform:uppercase;color:var(--muted)}
   .spec .body{margin-top:14px;max-width:60ch;color:var(--muted);font-size:.98rem;
@@ -162,7 +166,7 @@
         <span class="btn">Order flowers</span>
       </div>
     </div>
-    <p class="caption">How the home page could open — your hero graphic, the palette, and the type working together.</p>
+    <p class="caption">How the home page could open. Your hero graphic, the palette, and the type working together.</p>
   </section>
 
   <section>
@@ -203,12 +207,12 @@
     <div class="sec-head">
       <p class="eyebrow">The Mark</p>
       <h2>The logo, proven on every ground</h2>
-      <p>Your gold mark on cream, reversed to warm gold on deep plum, and dropped to ivory on a gold field — so it holds up in the header, the footer, and anywhere between.</p>
+      <p>Your gold mark on cream, reversed to warm gold on deep plum, and dropped to ivory on a gold field, so it holds up in the header, the footer, and anywhere between.</p>
     </div>
     <div class="grounds">
-      <div class="gr ivory"><img src="__LOGO__" alt="mark on ivory"><span>On Ivory</span></div>
-      <div class="gr plum"><div class="lb">LB</div><span>Reversed · gold on plum</span></div>
-      <div class="gr gold"><div class="lb">LB</div><span>Ivory on gold</span></div>
+      <div class="gr ivory"><img src="__MARK_GOLD__" alt="Luna's Bouquet mark, gold on ivory"><span>On Ivory</span></div>
+      <div class="gr plum"><img src="__MARK_GOLD__" alt="Luna's Bouquet mark, gold on plum"><span>Reversed · gold on plum</span></div>
+      <div class="gr gold"><img src="__MARK_IVORY__" alt="Luna's Bouquet mark, ivory on gold"><span>Ivory on gold</span></div>
     </div>
   </section>
 
@@ -216,28 +220,49 @@
     <div class="sec-head">
       <p class="eyebrow">Typography · pick one</p>
       <h2>The face that carries the name</h2>
-      <p>All three pair a high-contrast display serif with Jost, a light geometric sans for labels and buttons — the airy, wide-tracked feel of your logo. My recommendation is at the top.</p>
+      <p>All six pair a display serif with Jost, a light geometric sans for labels and buttons, matching the airy, wide-tracked feel of your logo. My recommendation is at the top. Reply with the one you love.</p>
     </div>
 
     <div class="spec pick">
       <div class="tag"><span class="pill rec">Recommended</span><span class="names">Cormorant Garamond &nbsp;+&nbsp; Jost</span></div>
       <p class="big sample-cor">Luna's <em>Bouquet</em></p>
       <p class="row">Valentine's · Mother's Day · Weddings</p>
-      <p class="body">Cormorant is the closest cousin to the refined serif in your mark — high contrast, delicate, unmistakably florist. It feels like a boutique, never a chain.</p>
+      <p class="body">Cormorant is the closest cousin to the refined serif in your mark. High contrast, delicate, unmistakably florist. It feels like a boutique, never a chain.</p>
     </div>
 
     <div class="spec">
       <div class="tag"><span class="pill">Alternate</span><span class="names">Playfair Display &nbsp;+&nbsp; Jost</span></div>
       <p class="big sample-play">Luna's <em>Bouquet</em></p>
       <p class="row">Valentine's · Mother's Day · Weddings</p>
-      <p class="body sample-cor">Playfair is bolder and more editorial — sharper contrast, a little more magazine-cover. Choose this if you want the name to feel weightier and more dramatic.</p>
+      <p class="body sample-cor">Playfair is bolder and more editorial. Sharper contrast, a little more magazine-cover. Choose this if you want the name to feel weightier and more dramatic.</p>
     </div>
 
     <div class="spec">
       <div class="tag"><span class="pill">Alternate</span><span class="names">Fraunces &nbsp;+&nbsp; Jost</span></div>
       <p class="big sample-fr">Luna's <em>Bouquet</em></p>
       <p class="row">Valentine's · Mother's Day · Weddings</p>
-      <p class="body sample-cor">Fraunces has more warmth and character — softer, slightly vintage, a touch of personality. Choose this if you want friendly-premium over cool-elegant.</p>
+      <p class="body sample-cor">Fraunces has more warmth and character. Softer, slightly vintage, a touch of personality. Choose this if you want friendly-premium over cool-elegant.</p>
+    </div>
+
+    <div class="spec">
+      <div class="tag"><span class="pill">Alternate</span><span class="names">Prata &nbsp;+&nbsp; Jost</span></div>
+      <p class="big sample-prata">Luna's <em>Bouquet</em></p>
+      <p class="row">Valentine's · Mother's Day · Weddings</p>
+      <p class="body sample-cor">Prata is the fashion-house serif. Fine hairlines, high glamour, the feel of a couture invitation. The most luxurious and the most delicate of the set.</p>
+    </div>
+
+    <div class="spec">
+      <div class="tag"><span class="pill">Alternate</span><span class="names">Marcellus &nbsp;+&nbsp; Jost</span></div>
+      <p class="big sample-mar">Luna's <em>Bouquet</em></p>
+      <p class="row">Valentine's · Mother's Day · Weddings</p>
+      <p class="body sample-cor">Marcellus is quiet and classical, carved rather than drawn. Timeless and wedding-elegant, with an even weight that reads beautifully at any size.</p>
+    </div>
+
+    <div class="spec">
+      <div class="tag"><span class="pill">Alternate</span><span class="names">DM Serif Display &nbsp;+&nbsp; Jost</span></div>
+      <p class="big sample-dm">Luna's <em>Bouquet</em></p>
+      <p class="row">Valentine's · Mother's Day · Weddings</p>
+      <p class="body sample-cor">DM Serif is lush and rounded, warm and confident. The friendliest luxury of the group, romantic without feeling fragile.</p>
     </div>
   </section>
 
@@ -247,8 +272,8 @@
       <h2>The references behind the palette</h2>
     </div>
     <div class="refs">
-      <div class="ref"><img src="__MCQUEEN__" alt="McQueen bouquet inspiration"><div class="cap">McQueen inspiration — the coral peony, the depth, the luxury standard.</div></div>
-      <div class="ref"><img src="__HERO__" alt="Hero arrangement"><div class="cap">Your hero graphic — cream, peach, and coral, with room to breathe.</div></div>
+      <div class="ref"><img src="__MCQUEEN__" alt="McQueen bouquet inspiration"><div class="cap">McQueen inspiration. The coral peony, the depth, the luxury standard.</div></div>
+      <div class="ref"><img src="__HERO__" alt="Hero arrangement"><div class="cap">Your hero graphic. Cream, peach, and coral, with room to breathe.</div></div>
     </div>
   </section>
 
