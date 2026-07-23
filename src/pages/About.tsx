@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import PageHeader from '@/components/PageHeader'
 import bloom from '@/assets/bloom.jpg'
-import hero from '@/assets/hero.jpg'
+import { ahnaleighAbout } from '@/lib/media'
 
 export default function About() {
   return (
@@ -20,9 +20,9 @@ export default function About() {
           <Reveal>
             <div className="overflow-hidden rounded-sm shadow-[0_30px_80px_-45px_rgba(58,33,48,0.6)]">
               <img
-                src={hero}
-                alt="A Luna's Bouquet arrangement of garden roses and blossom"
-                className="h-[340px] w-full object-cover object-right sm:h-[460px]"
+                src={ahnaleighAbout}
+                alt="One of Ahnaleigh's arrangements in pink and cream, set against the Arizona desert"
+                className="h-[340px] w-full object-cover sm:h-[460px]"
               />
             </div>
           </Reveal>
@@ -44,7 +44,8 @@ export default function About() {
               she makes is a step toward it.
             </p>
             <p>
-              To date she has designed for weddings and gatherings and dozens of arrangements, and
+              She has designed for weddings and gatherings, and for corporate and nonprofit
+              events, and
               she is growing a loyal base of people who come back season after season. Her work
               speaks for itself. It is fresh, generous, and made with genuine care.
             </p>

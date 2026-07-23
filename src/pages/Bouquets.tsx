@@ -2,14 +2,50 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Check } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import PageHeader from '@/components/PageHeader'
+import Gallery from '@/components/Gallery'
 import bloom from '@/assets/bloom.jpg'
 import { HOLIDAY_ARRANGEMENTS } from '@/lib/arrangements'
+import { HOLIDAY_MEDIA } from '@/lib/media'
 
 // Sourced from arrangements.ts rather than repeated here — this page and the order form
 // drifting apart on delivery dates is exactly the bug worth designing out.
 const holidays = HOLIDAY_ARRANGEMENTS.filter((a) => a.id !== 'monthly-subscription').map(
-  (a) => ({ name: a.label, when: a.delivery })
+  (a) => ({ id: a.id, name: a.label, when: a.delivery })
 )
+
+// Some holidays are a photo, some are a short clip of the real arrangement. Videos are
+// muted and carry no audio track at all (see scripts/prepare-media.mjs), which is also
+// what lets them autoplay — browsers block autoplay with sound.
+function HolidayMediaFrame({ id, name }: { id: string; name: string }) {
+  const media = HOLIDAY_MEDIA[id]
+  if (!media) {
+    return <div className="aspect-[4/3] w-full bg-champagne/60" aria-hidden />
+  }
+  if (media.kind === 'video') {
+    return (
+      <video
+        className="aspect-[4/3] w-full object-cover"
+        src={media.src}
+        poster={media.poster}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-label={`${name} arrangement`}
+      />
+    )
+  }
+  return (
+    <img
+      src={media.src}
+      alt={media.alt}
+      loading="lazy"
+      decoding="async"
+      className="aspect-[4/3] w-full object-cover"
+    />
+  )
+}
 
 const included = [
   'A large, hand-tied arrangement',
@@ -66,18 +102,23 @@ export default function Bouquets() {
       {/* Holiday list */}
       <section className="bg-ivory py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-6 sm:px-8">
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {holidays.map((h, i) => (
               <Reveal as="article" key={h.name} delay={i * 0.04}>
-                <div className="flex h-full flex-col justify-between rounded-sm border border-gold/15 bg-surface p-6 transition-colors hover:border-gold/40">
-                  <h3 className="font-display text-2xl text-plum">{h.name}</h3>
-                  <p className="label mt-6 text-[0.6rem] text-gold/80">{h.when}</p>
+                <div className="group flex h-full flex-col overflow-hidden rounded-sm border border-gold/15 bg-surface transition-colors hover:border-gold/40">
+                  <HolidayMediaFrame id={h.id} name={h.name} />
+                  <div className="flex flex-1 flex-col justify-between p-6">
+                    <h3 className="font-display text-2xl text-plum">{h.name}</h3>
+                    <p className="label mt-5 text-[0.6rem] text-gold/80">{h.when}</p>
+                  </div>
                 </div>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
+
+      <Gallery />
 
       {/* Subscription + Custom */}
       <section className="bg-champagne/50 py-24 sm:py-28">
