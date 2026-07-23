@@ -1,0 +1,110 @@
+/* Fonts (self-hosted via @fontsource, Lovable-friendly) */
+@import '@fontsource/prata/400.css';
+@import '@fontsource/jost/300.css';
+@import '@fontsource/jost/400.css';
+@import '@fontsource/jost/500.css';
+@import '@fontsource/jost/600.css';
+@import '@fontsource/cormorant-garamond/400.css';
+@import '@fontsource/cormorant-garamond/500.css';
+@import '@fontsource/cormorant-garamond/600.css';
+@import '@fontsource/cormorant-garamond/400-italic.css';
+
+@import 'tailwindcss';
+
+@theme {
+  /* Palette — from agents/DESIGN.md, confirmed by Christine 2026-07-23 */
+  --color-ivory: #f6f1e7;
+  --color-champagne: #ece3d2;
+  --color-surface: #fbf8f1;
+  --color-edge: #e2d8c4;
+  --color-gold: #a97c24;
+  --color-gold-light: #c6a24e;
+  --color-rosewood: #a8465a;
+  --color-rosewood-dark: #8c3a4b;
+  --color-plum: #3a2130;
+  --color-plum-light: #4a2b3c;
+  --color-sage: #7c8060;
+  --color-sage-light: #9a9d7e;
+  --color-ink: #2a2420;
+  --color-muted: #6e6153;
+
+  /* Type */
+  --font-display: 'Prata', Georgia, 'Times New Roman', serif;
+  --font-body: 'Cormorant Garamond', Georgia, serif;
+  --font-ui: 'Jost', system-ui, -apple-system, sans-serif;
+
+  /* Motion */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    background-color: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-ui);
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+  p { margin: 0; }
+  ::selection {
+    background: var(--color-rosewood);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+}
+
+@utility label {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+@layer utilities {
+  .prose-serif p {
+    font-family: var(--font-body);
+    font-size: 1.28rem;
+    line-height: 1.62;
+    color: var(--color-ink);
+    margin-bottom: 1.1rem;
+  }
+  .hairline {
+    height: 1px;
+    background: var(--color-gold);
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Gentle reveal-on-load */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise 0.9s var(--ease-soft) both; }
+.rise-1 { animation-delay: 0.08s; }
+.rise-2 { animation-delay: 0.18s; }
+.rise-3 { animation-delay: 0.30s; }
