@@ -1,0 +1,124 @@
+// Client for /api/admin/*. The password is held in sessionStorage and sent as a header
+// on every request — it is re-checked server-side each time, so there is no session to
+// forge. Closing the tab clears it.
+
+const KEY = 'lb_admin_pw'
+
+export function getPassword(): string {
+  return sessionStorage.getItem(KEY) ?? ''
+}
+
+export function setPassword(pw: string) {
+  sessionStorage.setItem(KEY, pw)
+}
+
+export function clearPassword() {
+  sessionStorage.removeItem(KEY)
+}
+
+export class AuthError extends Error {}
+
+async function call<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(path, {
+    ...init,
+    headers: {
+      'Content-Type': 'application/json',
+      'x-admin-password': getPassword(),
+      ...(init?.headers ?? {}),
+    },
+  })
+
+  if (res.status === 401) {
+    // Kick the UI back to the password screen rather than showing an empty dashboard.
+    clearPassword()
+    throw new AuthError('Not authorized.')
+  }
+
+  const json = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error((json as { error?: string }).error || 'Something went wrong.')
+  return json as T
+}
+
+export type OrderStatus = 'new' | 'confirmed' | 'paid' | 'delivered' | 'cancelled'
+
+export type Order = {
+  id: string
+  created_at: string
+  status: OrderStatus
+  arrangements: string[]
+  estimated_total: number | null
+  card_message: string | null
+  custom_details: string | null
+  delivery_instructions: string | null
+  customer_id: string | null
+  customer_name: string | null
+  customer_email: string | null
+  customer_phone: string | null
+  recipient_name: string | null
+  recipient_address: string | null
+}
+
+export type CustomerSummary = {
+  id: string
+  created_at: string
+  name: string
+  email: string
+  phone: string | null
+  notes: string | null
+  recipientCount: number
+  orderCount: number
+  totalValue: number
+}
+
+export type Recipient = {
+  id: string
+  customer_id: string
+  name: string
+  address: string
+  gate_code: string | null
+  delivery_notes: string | null
+  relationship: string | null
+}
+
+export type Stats = {
+  orderCount: number
+  customerCount: number
+  newOrderCount: number
+  lifetimeValue: number
+  recentOrders: Order[]
+}
+
+export async function login(pw: string): Promise<void> {
+  setPassword(pw)
+  try {
+    await call('/api/admin/login', { method: 'POST', body: '{}' })
+  } catch (err) {
+    clearPassword()
+    throw err
+  }
+}
+
+export const getStats = () => call<Stats>('/api/admin/stats')
+
+export const getCustomers = (q = '') =>
+  call<{ customers: CustomerSummary[] }>(`/api/admin/customers?q=${encodeURIComponent(q)}`)
+
+export const getCustomer = (id: string) =>
+  call<{ customer: CustomerSummary; recipients: Recipient[]; orders: Order[] }>(
+    `/api/admin/customer?id=${encodeURIComponent(id)}`
+  )
+
+export const getOrders = (status = '') =>
+  call<{ orders: Order[] }>(`/api/admin/orders?status=${encodeURIComponent(status)}`)
+
+export const setOrderStatus = (id: string, status: OrderStatus) =>
+  call<{ ok: true }>('/api/admin/orders', {
+    method: 'PATCH',
+    body: JSON.stringify({ id, status }),
+  })
+
+export const updateRecipient = (id: string, patch: Partial<Recipient>) =>
+  call<{ ok: true }>('/api/admin/recipient', {
+    method: 'PATCH',
+    body: JSON.stringify({ id, ...patch }),
+  })

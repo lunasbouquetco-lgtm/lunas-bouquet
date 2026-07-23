@@ -11,6 +11,7 @@ export type OrderInput = {
   customerEmail: string
   recipientName: string
   recipientAddress: string
+  gateCode: string
   arrangements: string[] // ids
   customDetails: string
   cardMessage: string
@@ -37,19 +38,25 @@ export async function submitOrder(
   const estimated = estimateTotal(input.arrangements)
 
   // 1) Store the order in Supabase (source of truth).
+  //
+  // One RPC rather than three inserts: the browser holds the anon key and cannot read
+  // these tables, so it cannot look up whether this customer or recipient already
+  // exists. place_order() does the find-or-create server-side and returns only the new
+  // order id. It also protects a saved gate code from being blanked by a repeat order
+  // that left the field empty.
   if (supabase) {
-    const { error } = await supabase.from('orders').insert({
-      customer_name: input.customerName,
-      customer_phone: input.customerPhone,
-      customer_email: input.customerEmail,
-      recipient_name: input.recipientName,
-      recipient_address: input.recipientAddress,
-      arrangements: arrangementLabels,
-      custom_details: input.customDetails || null,
-      card_message: input.cardMessage || null,
-      delivery_instructions: input.deliveryInstructions || null,
-      estimated_total: estimated,
-      source: 'website',
+    const { error } = await supabase.rpc('place_order', {
+      p_customer_name: input.customerName,
+      p_customer_email: input.customerEmail,
+      p_customer_phone: input.customerPhone,
+      p_recipient_name: input.recipientName,
+      p_recipient_address: input.recipientAddress,
+      p_gate_code: input.gateCode || '',
+      p_arrangements: arrangementLabels,
+      p_custom_details: input.customDetails || '',
+      p_card_message: input.cardMessage || '',
+      p_delivery_instructions: input.deliveryInstructions || '',
+      p_estimated_total: estimated,
     })
     if (error) {
       return { ok: false, error: error.message }
@@ -72,6 +79,7 @@ export async function submitOrder(
           'Email': input.customerEmail,
           'Recipient': input.recipientName,
           'Delivery address': input.recipientAddress,
+          'Gate code': input.gateCode || '—',
           'Arrangements': arrangementLabels.join(', ') || '(none selected)',
           'Custom / event details': input.customDetails || '—',
           'Card message': input.cardMessage || '—',

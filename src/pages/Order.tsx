@@ -23,6 +23,7 @@ export default function Order() {
     customerEmail: '',
     recipientName: '',
     recipientAddress: '',
+    gateCode: '',
     customDetails: '',
     cardMessage: '',
     deliveryInstructions: '',
@@ -258,6 +259,20 @@ export default function Order() {
                     placeholder="Street, city, ZIP"
                   />
                 </Field>
+                <Field
+                  label="Gate or building code"
+                  id="gateCode"
+                  hint="Optional · if there is one"
+                >
+                  <input
+                    id="gateCode"
+                    value={form.gateCode}
+                    onChange={(e) => set('gateCode', e.target.value)}
+                    className={inputCls}
+                    autoComplete="off"
+                    placeholder="#1234"
+                  />
+                </Field>
               </div>
             </Section>
 
@@ -276,7 +291,7 @@ export default function Order() {
                 <Field
                   label="Delivery instructions"
                   id="deliveryInstructions"
-                  hint="Optional · gate code, leave with a neighbor, etc."
+                  hint="Optional · leave with a neighbor, ring twice, etc."
                 >
                   <textarea
                     id="deliveryInstructions"
