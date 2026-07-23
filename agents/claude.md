@@ -15,9 +15,10 @@ We are rebuilding it from scratch with a luxury-editorial aesthetic.
 ## What the business sells
 - **Holiday arrangements** — Valentine's Day, Easter, Mother's Day, Thanksgiving, Christmas.
 - **Events** — weddings, corporate events, parties, gatherings, meetings.
-- **One-off / custom orders** — (PRICING TO CONFIRM: live site says $100/arrangement incl. vase +
-  free Phoenix-metro delivery; Christine mentioned a $300 minimum for one-off orders. Reconcile
-  before writing pricing copy.)
+- **Pricing (CONFIRMED by Christine, 2026-07-23):**
+  - Seasonal / holiday arrangements: **$125 each** (includes vase + free Phoenix-metro delivery).
+  - One-off / custom orders: **$375 minimum**.
+  - Events: quote-based (treat as custom).
 - Quarterly flower membership.
 - Free delivery within Phoenix Metro Area including Scottsdale. Minimum 48 hours notice.
 - Payment: Venmo, Zelle, check, cash (arranged after order submission).

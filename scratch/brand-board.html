@@ -1,0 +1,265 @@
+<title>Luna's Bouquet — Brand Direction</title>
+<style>
+  @font-face{font-family:'Cormorant';src:url(__F_CORMORANT__) format('woff2');font-weight:500;font-display:swap}
+  @font-face{font-family:'Cormorant';src:url(__F_CORMORANT6__) format('woff2');font-weight:600;font-display:swap}
+  @font-face{font-family:'Playfair';src:url(__F_PLAYFAIR__) format('woff2');font-weight:600;font-display:swap}
+  @font-face{font-family:'Fraunces';src:url(__F_FRAUNCES__) format('woff2');font-weight:600;font-display:swap}
+  @font-face{font-family:'Jost';src:url(__F_JOST__) format('woff2');font-weight:400;font-display:swap}
+  @font-face{font-family:'Jost';src:url(__F_JOST5__) format('woff2');font-weight:500;font-display:swap}
+
+  :root{
+    --ivory:#F6F1E7; --champagne:#ECE3D2; --gold:#A97C24; --gold-lt:#C6A24E;
+    --rosewood:#A8465A; --plum:#3A2130; --sage:#7C8060; --ink:#2A2420;
+    --paper:var(--ivory); --surface:#FBF8F1; --edge:#E2D8C4;
+    --text:var(--ink); --muted:#6E6153; --accent:var(--rosewood); --brand:var(--gold);
+    --display:'Cormorant',Georgia,serif; --ui:'Jost','Helvetica Neue',sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --paper:#221019; --surface:#2C1622; --edge:#4A2E3B;
+      --text:#F1E7DA; --muted:#B79FA6; --brand:#D0A64F; --accent:#D9788A; }
+  }
+  :root[data-theme="dark"]{ --paper:#221019; --surface:#2C1622; --edge:#4A2E3B;
+    --text:#F1E7DA; --muted:#B79FA6; --brand:#D0A64F; --accent:#D9788A; }
+  :root[data-theme="light"]{ --paper:var(--ivory); --surface:#FBF8F1; --edge:#E2D8C4;
+    --text:var(--ink); --muted:#6E6153; --brand:var(--gold); --accent:var(--rosewood); }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--text);font-family:var(--ui);
+    font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .eyebrow{font-family:var(--ui);font-size:.72rem;font-weight:500;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--brand)}
+  h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;line-height:1.08;margin:0}
+  p{margin:0}
+  section{padding:72px 0;border-top:1px solid var(--edge)}
+  section:first-of-type{border-top:0}
+
+  /* ---- Masthead ---- */
+  .mast{padding:64px 0 40px;text-align:center}
+  .mast .mark{width:190px;height:auto;margin:0 auto 20px;display:block;
+    mix-blend-mode:multiply}
+  :root[data-theme="dark"] .mast .mark,
+  @media (prefers-color-scheme:dark){}
+  .mast h1{font-size:clamp(2.4rem,6vw,3.6rem);letter-spacing:.01em}
+  .mast .lede{max-width:44ch;margin:16px auto 0;color:var(--muted);font-size:1.05rem}
+
+  /* ---- Hero mockup ---- */
+  .hero{position:relative;border-radius:3px;overflow:hidden;aspect-ratio:16/9;
+    display:flex;align-items:center;box-shadow:0 24px 60px -30px rgba(58,33,48,.55)}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .hero .scrim{position:absolute;inset:0;
+    background:linear-gradient(90deg,rgba(246,241,231,.94) 0%,rgba(246,241,231,.72) 34%,rgba(246,241,231,0) 62%)}
+  .hero .copy{position:relative;padding:0 clamp(28px,6vw,72px);max-width:60%}
+  .hero .tab{font-family:var(--ui);font-size:.62rem;letter-spacing:.34em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .hero h2{font-family:var(--display);color:var(--ink);
+    font-size:clamp(1.9rem,5vw,3.4rem);line-height:1.02}
+  .hero h2 em{font-style:italic;color:var(--rosewood)}
+  .hero .sub{font-family:var(--ui);color:#5b4b3f;margin-top:14px;font-size:.98rem;max-width:34ch}
+  .hero .btn{display:inline-block;margin-top:22px;font-family:var(--ui);font-size:.72rem;
+    letter-spacing:.18em;text-transform:uppercase;color:#fff;background:var(--rosewood);
+    padding:13px 26px;border-radius:2px}
+  .caption{font-family:var(--ui);font-size:.8rem;color:var(--muted);margin-top:14px;text-align:center}
+
+  /* ---- Palette ---- */
+  .sec-head{margin-bottom:32px}
+  .sec-head h2{font-size:clamp(1.8rem,4vw,2.4rem);margin-top:8px}
+  .sec-head p{color:var(--muted);max-width:52ch;margin-top:10px}
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .sw{border-radius:4px;overflow:hidden;border:1px solid var(--edge);background:var(--surface)}
+  .sw .chip{height:104px}
+  .sw .meta{padding:12px 14px}
+  .sw .nm{font-family:var(--display);font-size:1.15rem;font-weight:600}
+  .sw .role{font-size:.72rem;color:var(--muted);margin-top:2px;line-height:1.4}
+  .sw .hex{font-family:var(--ui);font-size:.72rem;letter-spacing:.08em;color:var(--muted);
+    margin-top:8px;font-variant-numeric:tabular-nums;text-transform:uppercase}
+
+  /* ---- discipline demo ---- */
+  .demo{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:34px}
+  @media(max-width:640px){.demo{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--edge);border-radius:4px;
+    padding:26px;display:flex;flex-direction:column;gap:10px}
+  .card .kicker{font-family:var(--ui);font-size:.66rem;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--gold)}
+  .card h3{font-size:1.5rem}
+  .card p{color:var(--muted);font-size:.94rem}
+  .card .price{font-family:var(--display);font-size:1.3rem;color:var(--text)}
+  .card .cta{align-self:flex-start;margin-top:6px;font-family:var(--ui);font-size:.7rem;
+    letter-spacing:.16em;text-transform:uppercase;color:#fff;background:var(--rosewood);
+    padding:11px 22px;border-radius:2px}
+  .card.dark{background:var(--plum);border-color:transparent;color:#F1E4D6}
+  .card.dark h3{color:#fff}.card.dark p{color:#D6C3B4}.card.dark .price{color:#fff}
+  .card.dark .kicker{color:var(--gold-lt)}
+
+  /* ---- mark on grounds ---- */
+  .grounds{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+  @media(max-width:640px){.grounds{grid-template-columns:1fr}}
+  .gr{aspect-ratio:4/3;border-radius:4px;display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--edge);position:relative}
+  .gr img{width:62%;height:auto}
+  .gr .lb{font-family:var(--display);font-size:2.6rem;font-weight:600;letter-spacing:.04em}
+  .gr span{position:absolute;bottom:10px;left:12px;font-family:var(--ui);font-size:.64rem;
+    letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+  .gr.ivory{background:var(--ivory)} .gr.ivory img{mix-blend-mode:multiply}
+  .gr.ivory span{color:#8a7a63}
+  .gr.plum{background:var(--plum)} .gr.plum .lb{color:var(--gold-lt)} .gr.plum span{color:#c9a}
+  .gr.gold{background:var(--gold)} .gr.gold .lb{color:var(--ivory)} .gr.gold span{color:#f3e6c8}
+
+  /* ---- type specimens ---- */
+  .spec{border:1px solid var(--edge);border-radius:6px;background:var(--surface);
+    padding:32px;margin-bottom:18px}
+  .spec.pick{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+  .spec .tag{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+  .spec .pill{font-family:var(--ui);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+    padding:5px 11px;border-radius:20px;background:var(--champagne);color:#7a6633}
+  :root[data-theme="dark"] .spec .pill{background:#3a2a1a;color:var(--gold-lt)}
+  .spec .pill.rec{background:var(--gold);color:#fff}
+  .spec .names{font-family:var(--ui);font-size:.78rem;color:var(--muted);letter-spacing:.04em}
+  .spec .big{font-size:clamp(2rem,5vw,3rem);line-height:1.05;margin:0}
+  .spec .big em{font-style:italic;color:var(--accent)}
+  .spec .sample-cor{font-family:'Cormorant',serif}
+  .spec .sample-play{font-family:'Playfair',serif}
+  .spec .sample-fr{font-family:'Fraunces',serif}
+  .spec .row{margin-top:14px;font-family:var(--ui);font-size:.82rem;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--muted)}
+  .spec .body{margin-top:14px;max-width:60ch;color:var(--muted);font-size:.98rem;
+    font-family:'Cormorant',serif;font-size:1.15rem;line-height:1.55}
+
+  /* ---- references ---- */
+  .refs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:640px){.refs{grid-template-columns:1fr}}
+  .ref{border-radius:4px;overflow:hidden;border:1px solid var(--edge)}
+  .ref img{width:100%;height:240px;object-fit:cover;display:block}
+  .ref .cap{padding:12px 16px;font-family:var(--ui);font-size:.78rem;color:var(--muted);
+    background:var(--surface)}
+
+  .foot{text-align:center;padding:64px 0 80px}
+  .foot h2{font-size:clamp(1.6rem,4vw,2.2rem)}
+  .foot p{color:var(--muted);max-width:46ch;margin:14px auto 0}
+  .foot .ask{margin-top:22px;display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .foot .ask b{font-family:var(--ui);font-weight:500;font-size:.74rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--text);border:1px solid var(--gold);
+    padding:10px 18px;border-radius:2px}
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <img class="mark" src="__LOGO__" alt="Luna's Bouquet logo mark">
+    <p class="eyebrow">Brand Direction · v1</p>
+    <h1>A palette built from the peonies</h1>
+    <p class="lede">Warm gold from your mark, the coral of a McQueen peony spent once, and cream to let the flowers breathe. Confirm the colors, pick a typeface, and the team builds.</p>
+  </header>
+
+  <section>
+    <div class="hero">
+      <img src="__HERO__" alt="Luna's Bouquet hero arrangement">
+      <div class="scrim"></div>
+      <div class="copy">
+        <div class="tab">Luna's Bouquet</div>
+        <h2>Flowers that <em>brighten</em> the day.</h2>
+        <p class="sub">Fresh, seasonal arrangements. Delivered across the Phoenix Metro.</p>
+        <span class="btn">Order flowers</span>
+      </div>
+    </div>
+    <p class="caption">How the home page could open — your hero graphic, the palette, and the type working together.</p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">The Palette</p>
+      <h2>Seven colors, one signature</h2>
+      <p>Cream is the ground everything sits on. Gold is the constant thread, from the logo through every divider and label. Rosewood is the one bold note, spent only on the things you want someone to press.</p>
+    </div>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#F6F1E7"></div><div class="meta"><div class="nm">Ivory</div><div class="role">Page ground</div><div class="hex">#F6F1E7</div></div></div>
+      <div class="sw"><div class="chip" style="background:#ECE3D2"></div><div class="meta"><div class="nm">Champagne</div><div class="role">Cards &amp; surfaces</div><div class="hex">#ECE3D2</div></div></div>
+      <div class="sw"><div class="chip" style="background:#A97C24"></div><div class="meta"><div class="nm">Antique Gold</div><div class="role">Brand thread, labels, rules</div><div class="hex">#A97C24</div></div></div>
+      <div class="sw"><div class="chip" style="background:#A8465A"></div><div class="meta"><div class="nm">Rosewood</div><div class="role">Signature accent · buttons only</div><div class="hex">#A8465A</div></div></div>
+      <div class="sw"><div class="chip" style="background:#3A2130"></div><div class="meta"><div class="nm">Deep Plum</div><div class="role">Footer, dark sections, ink</div><div class="hex">#3A2130</div></div></div>
+      <div class="sw"><div class="chip" style="background:#7C8060"></div><div class="meta"><div class="nm">Sage</div><div class="role">Natural secondary, greenery</div><div class="hex">#7C8060</div></div></div>
+      <div class="sw"><div class="chip" style="background:#2A2420"></div><div class="meta"><div class="nm">Ink</div><div class="role">Body text</div><div class="hex">#2A2420</div></div></div>
+    </div>
+
+    <div class="demo">
+      <div class="card">
+        <div class="kicker">Seasonal</div>
+        <h3>Mother's Day arrangement</h3>
+        <p>A large, hand-tied arrangement of the season's best blooms, in a vase, delivered to the door.</p>
+        <div class="price">$125</div>
+        <span class="cta">Order now</span>
+      </div>
+      <div class="card dark">
+        <div class="kicker">Events &amp; custom</div>
+        <h3>Weddings &amp; gatherings</h3>
+        <p>Bespoke florals designed with you. Custom orders from a $375 minimum.</p>
+        <div class="price">From $375</div>
+        <span class="cta" style="background:var(--gold-lt);color:#2A1520">Start a request</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">The Mark</p>
+      <h2>The logo, proven on every ground</h2>
+      <p>Your gold mark on cream, reversed to warm gold on deep plum, and dropped to ivory on a gold field — so it holds up in the header, the footer, and anywhere between.</p>
+    </div>
+    <div class="grounds">
+      <div class="gr ivory"><img src="__LOGO__" alt="mark on ivory"><span>On Ivory</span></div>
+      <div class="gr plum"><div class="lb">LB</div><span>Reversed · gold on plum</span></div>
+      <div class="gr gold"><div class="lb">LB</div><span>Ivory on gold</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Typography · pick one</p>
+      <h2>The face that carries the name</h2>
+      <p>All three pair a high-contrast display serif with Jost, a light geometric sans for labels and buttons — the airy, wide-tracked feel of your logo. My recommendation is at the top.</p>
+    </div>
+
+    <div class="spec pick">
+      <div class="tag"><span class="pill rec">Recommended</span><span class="names">Cormorant Garamond &nbsp;+&nbsp; Jost</span></div>
+      <p class="big sample-cor">Luna's <em>Bouquet</em></p>
+      <p class="row">Valentine's · Mother's Day · Weddings</p>
+      <p class="body">Cormorant is the closest cousin to the refined serif in your mark — high contrast, delicate, unmistakably florist. It feels like a boutique, never a chain.</p>
+    </div>
+
+    <div class="spec">
+      <div class="tag"><span class="pill">Alternate</span><span class="names">Playfair Display &nbsp;+&nbsp; Jost</span></div>
+      <p class="big sample-play">Luna's <em>Bouquet</em></p>
+      <p class="row">Valentine's · Mother's Day · Weddings</p>
+      <p class="body sample-cor">Playfair is bolder and more editorial — sharper contrast, a little more magazine-cover. Choose this if you want the name to feel weightier and more dramatic.</p>
+    </div>
+
+    <div class="spec">
+      <div class="tag"><span class="pill">Alternate</span><span class="names">Fraunces &nbsp;+&nbsp; Jost</span></div>
+      <p class="big sample-fr">Luna's <em>Bouquet</em></p>
+      <p class="row">Valentine's · Mother's Day · Weddings</p>
+      <p class="body sample-cor">Fraunces has more warmth and character — softer, slightly vintage, a touch of personality. Choose this if you want friendly-premium over cool-elegant.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Where it came from</p>
+      <h2>The references behind the palette</h2>
+    </div>
+    <div class="refs">
+      <div class="ref"><img src="__MCQUEEN__" alt="McQueen bouquet inspiration"><div class="cap">McQueen inspiration — the coral peony, the depth, the luxury standard.</div></div>
+      <div class="ref"><img src="__HERO__" alt="Hero arrangement"><div class="cap">Your hero graphic — cream, peach, and coral, with room to breathe.</div></div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p class="eyebrow">Your call</p>
+    <h2>Confirm this, and we build</h2>
+    <p>Tell me: keep the palette as is or adjust a color, and which of the three typefaces feels like Luna's.</p>
+    <div class="ask">
+      <b>Palette: yes / tweak</b>
+      <b>Font: Cormorant / Playfair / Fraunces</b>
+    </div>
+  </footer>
+
+</div>

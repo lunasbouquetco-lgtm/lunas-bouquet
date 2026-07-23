@@ -11,7 +11,7 @@
 1. Rosa derives palette from McQueen inspiration + hero, ties to gold logo.
 2. Pick fonts (display serif for the LB feel + a clean text face).
 3. Ship Christine a **color artifact** + a **mark mockup** for sign-off.
-4. Reconcile pricing ($100 vs $300 min) with Christine.
+4. Pricing CONFIRMED: $125/seasonal arrangement (vase + free delivery); $375 min one-off/custom.
 5. Capture the Google Form fields exactly (via browser).
 **Christine approves palette + font + pricing before Phase 1.**
 
@@ -39,6 +39,12 @@
 
 ## Phase 5 — Ship (only on Christine's go)
 - Push to GitHub, deploy to Vercel, connect domain, connect Lovable for Annie's future edits.
+
+## Visual bar (Christine, 2026-07-23)
+- Must be as gorgeous as the Insight AI and Butterfly Effect sites. Visual-rich, generous imagery.
+- The **order form itself must be beautiful** — not a plain form. Same design language, imagery,
+  editorial spacing. It's a destination page, not a utility.
+- More MidJourney imagery is coming; build with tasteful placeholders + real hero now, swap in later.
 
 ## Guardrails
 - Nothing to prod / no real customer email without Christine's explicit go.
