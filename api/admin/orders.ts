@@ -9,7 +9,15 @@ function query(req: Req, key: string): string {
 const STATUSES = ['new', 'confirmed', 'paid', 'delivered', 'cancelled'] as const
 // Fields Annie may edit on an order. The customer/recipient links and timestamps are
 // not editable here — those belong to the customer and recipient records.
-const EDITABLE = ['status', 'card_message', 'delivery_instructions', 'admin_notes'] as const
+const EDITABLE = [
+  'status',
+  'card_message',
+  'delivery_instructions',
+  'admin_notes',
+  'estimated_total',
+  'amount_charged',
+  'amount_paid',
+] as const
 
 // GET    → the order list, newest first, optionally filtered by status.
 // PATCH  → edit an order (status, card message, delivery instructions, admin notes).
