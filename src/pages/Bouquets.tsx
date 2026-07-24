@@ -2,9 +2,8 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Check } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import Gallery from '@/components/Gallery'
-import LoopingVideo from '@/components/LoopingVideo'
 import { HOLIDAY_ARRANGEMENTS, ROSE_PRICE, ROSE_COUNT } from '@/lib/arrangements'
-import { HOLIDAY_MEDIA, ahnaleighVideo } from '@/lib/media'
+import { HOLIDAY_MEDIA } from '@/lib/media'
 import hero from '@/assets/hero.jpg'
 import PageMeta from '@/components/PageMeta'
 
@@ -65,74 +64,56 @@ export default function Bouquets() {
         description="Seasonal arrangements for Thanksgiving, Christmas, Valentine's Day, Easter and Mother's Day, $125 with vase and free Phoenix delivery. Or 100 roses for $275."
         path="/bouquets"
       />
-      {/* Full-bleed hero — flowers behind a floating card, details flow down from here */}
-      <section className="relative flex min-h-[74vh] items-center justify-center overflow-hidden">
-        <img
-          src={hero}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        {/* Soft wash so the card reads cleanly over any part of the image */}
-        <div className="absolute inset-0 bg-gradient-to-b from-plum/30 via-plum/10 to-ivory/40" />
-        <Reveal className="relative mx-5 mt-16 max-w-2xl rounded-sm bg-ivory/90 px-8 py-14 text-center shadow-[0_50px_100px_-55px_rgba(58,33,48,0.75)] backdrop-blur-[2px] sm:px-16 sm:py-16">
-          <p className="label text-gold">What we make</p>
-          <h1 className="mt-5 font-display text-5xl leading-tight text-plum sm:text-6xl">
-            Bouquets &amp; arrangements
-          </h1>
-          <p className="mx-auto mt-6 max-w-xl font-body text-xl leading-relaxed text-ink/75">
-            Large, seasonal arrangements for the moments that matter, plus custom work and events.
-          </p>
-          <div className="mx-auto mt-9 h-px w-16 bg-gold/40" />
-        </Reveal>
-      </section>
+      {/* Blended hero: the photo melts down into the Holiday Bouquets content, so the
+          page opens on flowers and flows straight into the offering — no hard card.
+          Swap `hero` for a wide landscape shot of one of Annie's arrangements when ready. */}
+      <section className="relative bg-ivory">
+        {/* Image band that fades into the ivory below it */}
+        <div className="relative h-[46vh] min-h-[340px] w-full overflow-hidden sm:h-[58vh]">
+          <img src={hero} alt="" aria-hidden className="h-full w-full object-cover" />
+          {/* top wash clears the nav; bottom fade melts the image into the page */}
+          <div className="absolute inset-0 bg-gradient-to-b from-plum/25 via-transparent to-ivory" />
+        </div>
 
-      {/* Seasonal arrangements */}
-      <section className="bg-ivory pb-8 pt-20 sm:pt-24">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 sm:px-8 lg:grid-cols-2 lg:gap-16">
+        {/* Content pulled up into the blend, full-width and centered */}
+        <div className="relative z-10 mx-auto -mt-28 max-w-4xl px-6 pb-4 text-center sm:-mt-36 sm:px-8">
           <Reveal>
             <p className="label text-gold">Seasonal arrangements</p>
-            <h2 className="mt-4 font-display text-4xl text-plum sm:text-5xl">Holiday bouquets</h2>
-            <p className="mt-2 font-display text-2xl text-rosewood">$125 each</p>
-            <div className="prose-serif mt-6 max-w-lg">
-              <p>
-                For each holiday, we design a large, generous arrangement from the season&apos;s
-                finest flowers. Reserve yours ahead, and we deliver it fresh on the date.
-              </p>
-            </div>
-            <ul className="mt-7 flex flex-col gap-3">
-              {included.map((item) => (
-                <li key={item} className="flex items-center gap-3 font-body text-lg text-ink/85">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gold/15 text-gold">
-                    <Check size={13} />
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-6 rounded-sm bg-champagne/60 px-5 py-4 font-body text-lg text-plum">
-              🌸 Order three or more and take <strong>$10 off</strong> each arrangement.
+            <h1 className="mt-4 font-display text-5xl leading-tight text-plum sm:text-6xl">
+              Holiday bouquets
+            </h1>
+            <p className="mt-3 font-display text-2xl text-rosewood sm:text-3xl">$125 each</p>
+            <p className="mx-auto mt-6 max-w-2xl font-body text-xl leading-relaxed text-ink/75">
+              For each holiday, we design a large, generous arrangement from the season&apos;s finest
+              flowers. Reserve yours ahead, and we deliver it fresh on the date.
             </p>
-
-            <div className="mt-4 rounded-sm border border-rosewood/25 bg-surface px-5 py-4">
-              <p className="font-display text-xl text-plum">
-                Or {ROSE_COUNT} roses, for any holiday
-              </p>
-              <p className="mt-1 font-display text-lg text-rosewood">${ROSE_PRICE}</p>
-              <p className="mt-2 font-body text-lg text-ink/70">
-                A rose-only arrangement, {ROSE_COUNT} stems, available for every date above.
-              </p>
-            </div>
           </Reveal>
 
-          <Reveal delay={0.1}>
-            <div className="overflow-hidden rounded-sm shadow-[0_30px_70px_-40px_rgba(58,33,48,0.6)]">
-              <LoopingVideo
-                src={ahnaleighVideo.src}
-                poster={ahnaleighVideo.poster}
-                alt={ahnaleighVideo.alt}
-                className="h-[520px] w-full object-cover"
-              />
+          {/* What's included — a wide row rather than a narrow column */}
+          <Reveal className="mx-auto mt-9 flex max-w-3xl flex-wrap items-center justify-center gap-x-8 gap-y-3">
+            {included.map((item) => (
+              <span key={item} className="flex items-center gap-2 font-body text-lg text-ink/85">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gold/15 text-gold">
+                  <Check size={13} />
+                </span>
+                {item}
+              </span>
+            ))}
+          </Reveal>
+
+          {/* The two offers, side by side */}
+          <Reveal className="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-2">
+            <div className="flex flex-col justify-center rounded-sm bg-champagne/60 px-6 py-6 text-center">
+              <p className="font-body text-lg text-plum">
+                Order three or more and take <strong>$10 off</strong> each arrangement.
+              </p>
+            </div>
+            <div className="rounded-sm border border-rosewood/25 bg-surface px-6 py-6 text-center">
+              <p className="font-display text-xl text-plum">Or {ROSE_COUNT} roses, any holiday</p>
+              <p className="mt-1 font-display text-lg text-rosewood">${ROSE_PRICE}</p>
+              <p className="mt-2 font-body text-base text-ink/70">
+                A rose-only arrangement, {ROSE_COUNT} stems.
+              </p>
             </div>
           </Reveal>
         </div>
