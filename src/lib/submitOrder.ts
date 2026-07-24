@@ -94,5 +94,25 @@ export async function submitOrder(
     }
   }
 
+  // 3) Email the CUSTOMER a confirmation via /api/send-confirmation (Resend). This is
+  // best-effort and must never block: the order is already saved, and the customer has
+  // already seen the on-screen thank-you. A failure here (or the endpoint not being
+  // configured yet) is swallowed so it can't turn a good order into an error.
+  try {
+    await fetch('/api/send-confirmation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        customerName: input.customerName,
+        customerEmail: input.customerEmail,
+        recipientName: input.recipientName,
+        arrangements: arrangementLabels,
+        estimatedTotal: estimated,
+      }),
+    })
+  } catch {
+    // ignore — confirmation email is non-critical
+  }
+
   return { ok: true }
 }
