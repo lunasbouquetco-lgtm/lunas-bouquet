@@ -3,7 +3,8 @@ import { ArrowRight } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import PageHeader from '@/components/PageHeader'
 import bloom from '@/assets/bloom.jpg'
-import { ahnaleighAbout } from '@/lib/media'
+import { ahnaleighVideo } from '@/lib/media'
+import LoopingVideo from '@/components/LoopingVideo'
 import PageMeta from '@/components/PageMeta'
 
 export default function About() {
@@ -25,9 +26,10 @@ export default function About() {
         <div className="mx-auto max-w-5xl px-6 sm:px-8">
           <Reveal>
             <div className="overflow-hidden rounded-sm shadow-[0_30px_80px_-45px_rgba(58,33,48,0.6)]">
-              <img
-                src={ahnaleighAbout}
-                alt="One of Ahnaleigh's arrangements in pink and cream, set against the Arizona desert"
+              <LoopingVideo
+                src={ahnaleighVideo.src}
+                poster={ahnaleighVideo.poster}
+                alt={ahnaleighVideo.alt}
                 className="h-[340px] w-full object-cover sm:h-[460px]"
               />
             </div>

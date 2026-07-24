@@ -3,9 +3,9 @@ import { ArrowRight, Check } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import PageHeader from '@/components/PageHeader'
 import Gallery from '@/components/Gallery'
-import bloom from '@/assets/bloom.jpg'
+import LoopingVideo from '@/components/LoopingVideo'
 import { HOLIDAY_ARRANGEMENTS, ROSE_PRICE, ROSE_COUNT } from '@/lib/arrangements'
-import { HOLIDAY_MEDIA } from '@/lib/media'
+import { HOLIDAY_MEDIA, ahnaleighVideo } from '@/lib/media'
 import PageMeta from '@/components/PageMeta'
 
 // Sourced from arrangements.ts rather than repeated here — this page and the order form
@@ -111,7 +111,12 @@ export default function Bouquets() {
 
           <Reveal delay={0.1}>
             <div className="overflow-hidden rounded-sm shadow-[0_30px_70px_-40px_rgba(58,33,48,0.6)]">
-              <img src={bloom} alt="A seasonal Luna's Bouquet arrangement" className="h-[520px] w-full object-cover" />
+              <LoopingVideo
+                src={ahnaleighVideo.src}
+                poster={ahnaleighVideo.poster}
+                alt={ahnaleighVideo.alt}
+                className="h-[520px] w-full object-cover"
+              />
             </div>
           </Reveal>
         </div>

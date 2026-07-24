@@ -10,7 +10,7 @@ import mothersDay from '@/assets/media/holiday-mothers-day.jpg'
 import thanksgivingPoster from '@/assets/media/holiday-thanksgiving-poster.jpg'
 import christmasPoster from '@/assets/media/holiday-christmas-poster.jpg'
 import easterPoster from '@/assets/media/holiday-easter-poster.jpg'
-import ahnaleighAbout from '@/assets/media/ahnaleigh-about.jpg'
+import ahnaleighAboutPoster from '@/assets/media/ahnaleigh-about-poster.jpg'
 
 import g01 from '@/assets/media/g01-banquet-run.jpg'
 import g02 from '@/assets/media/g02-blush-on-black.jpg'
@@ -21,7 +21,13 @@ import gv01Poster from '@/assets/media/gv01-adhoc-one-poster.jpg'
 import gv02Poster from '@/assets/media/gv02-adhoc-two-poster.jpg'
 import gv03Poster from '@/assets/media/gv03-christmas-three-poster.jpg'
 
-export { ahnaleighAbout }
+// The video Ahnaleigh named for the About page — her signature arrangement, rotating
+// on the counter. Used on both the About hero and the top of the Bouquets page.
+export const ahnaleighVideo = {
+  src: '/media/ahnaleigh-about.mp4',
+  poster: ahnaleighAboutPoster,
+  alt: "One of Ahnaleigh's signature arrangements in pink, cream and white",
+}
 
 export type HolidayMedia =
   | { kind: 'image'; src: string; alt: string }
