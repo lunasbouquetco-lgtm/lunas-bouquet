@@ -49,30 +49,27 @@ const VIDEOS = [
   ['IMG_6407.MP4', 'holiday-easter'],
 ]
 
-// Twenty distinct arrangements. Deliberately no two angles of the same vase — the raw
-// folder is full of near-identical bursts (IMG_3552-3565 is one arrangement shot
-// fourteen times), and a gallery that repeats reads as padding.
+// Gallery = only the files Christine named herself (2026-07-23). Nothing from the
+// untouched IMG_#### pile, and no two angles of the same arrangement:
+//   Christmas 2       skipped — same arrangement as Christmas, different angle
+//   Christmas 4 Video skipped — already the Christmas holiday card
+//   Fall 1 Video      skipped — already the Thanksgiving card
+//   Mothers day       skipped — already the Mother's Day card
+//   Valentines Pink   skipped — picture is the Valentine's card, video is the same vase
+//   Ahnaleigh About   skipped — reserved for her story, not the work rail
 const GALLERY = [
-  ['IMG_8735.HEIC', 'g01-pink-garden-roses'],
-  ['IMG_4911.HEIC', 'g02-peach-coral-airy'],
-  ['IMG_1613.HEIC', 'g03-rust-chrysanthemum'],
-  ['Gallery 1.HEIC', 'g04-banquet-run'],
-  ['Extra Large Roses.JPG', 'g05-white-rose-globe'],
-  ['Event 1.HEIC', 'g06-blush-on-black'],
-  ['IMG_1239.HEIC', 'g07-white-hydrangea-event'],
-  ['IMG_1236.HEIC', 'g08-blue-hydrangea-peach'],
-  ['IMG_5390.HEIC', 'g09-coral-gerbera-window'],
-  ['IMG_5398.HEIC', 'g10-desert-wall-gold'],
-  ['IMG_6419.HEIC', 'g11-cream-peach-desert'],
-  ['IMG_8874.HEIC', 'g12-office-yellow-gerbera'],
-  ['IMG_8876.HEIC', 'g13-office-pink-daisy'],
-  ['IMG_3198.JPG', 'g14-cream-rose-mass'],
-  ['IMG_8933.HEIC', 'g15-red-rose-classic'],
-  ['IMG_0159.HEIC', 'g16-pink-gladiolus'],
-  ['IMG_0188.HEIC', 'g17-plum-cream-brick'],
-  ['IMG_8720.HEIC', 'g18-magenta-tall-vase'],
-  ['IMG_5019.HEIC', 'g19-sunflower-eucalyptus'],
-  ['IMG_6688.JPG', 'g20-white-lily-table'],
+  ['Gallery 1.HEIC', 'g01-banquet-run'],
+  ['Event 1.HEIC', 'g02-blush-on-black'],
+  ['Extra Large Roses.JPG', 'g03-extra-large-roses'],
+  ['Adhoc Flowers 3.HEIC', 'g04-gerbera-mix'],
+  ['Christmas.HEIC', 'g05-christmas'],
+]
+
+// Named videos that belong in the gallery rail, looping and silent like the holiday cards.
+const GALLERY_VIDEOS = [
+  ['Adhoc Flowers 1.MP4', 'gv01-adhoc-one'],
+  ['Adhoc Flowers 2.MP4', 'gv02-adhoc-two'],
+  ['Christmas 3.MP4', 'gv03-christmas-three'],
 ]
 
 // --- helpers ---------------------------------------------------------------------
@@ -119,7 +116,7 @@ for (const [file, slug, edge] of [...STILLS, ...GALLERY.map(([f, s]) => [f, s, 1
   ok++
 }
 
-for (const [file, slug] of VIDEOS) {
+for (const [file, slug] of [...VIDEOS, ...GALLERY_VIDEOS]) {
   const src = join(SRC_DIR, file)
   if (!existsSync(src)) { missing.push(file); continue }
   const destMp4 = join(OUT_VID, `${slug}.mp4`)

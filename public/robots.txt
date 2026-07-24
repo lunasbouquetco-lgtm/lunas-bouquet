@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# The order book is Annie's private admin. It is password-protected server-side, but
+# there is no reason for it to appear in search results either.
+Disallow: /admin
+
+Sitemap: https://lunasbouquet.com/sitemap.xml

@@ -45,7 +45,7 @@ export default function Gallery() {
           <div>
             <p className="label text-gold-light">Her work</p>
             <h2 className="mt-4 max-w-xl font-display text-4xl leading-tight text-ivory sm:text-5xl">
-              Twenty arrangements, no two alike.
+              A few of her arrangements.
             </h2>
           </div>
 
@@ -77,13 +77,27 @@ export default function Gallery() {
           >
             <figure className="m-0">
               <div className="aspect-[4/5] overflow-hidden rounded-sm bg-plum-light">
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.04]"
-                />
+                {item.kind === 'video' ? (
+                  <video
+                    src={item.src}
+                    poster={item.poster}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="none"
+                    aria-label={item.alt}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.04]"
+                  />
+                )}
               </div>
             </figure>
           </li>

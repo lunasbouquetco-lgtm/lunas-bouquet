@@ -6,6 +6,7 @@ import Gallery from '@/components/Gallery'
 import bloom from '@/assets/bloom.jpg'
 import { HOLIDAY_ARRANGEMENTS, ROSE_PRICE, ROSE_COUNT } from '@/lib/arrangements'
 import { HOLIDAY_MEDIA } from '@/lib/media'
+import PageMeta from '@/components/PageMeta'
 
 // Sourced from arrangements.ts rather than repeated here — this page and the order form
 // drifting apart on delivery dates is exactly the bug worth designing out.
@@ -57,6 +58,11 @@ const included = [
 export default function Bouquets() {
   return (
     <>
+      <PageMeta
+        title="Holiday Flower Arrangements in Phoenix | Luna's Bouquet"
+        description="Seasonal arrangements for Thanksgiving, Christmas, Valentine's Day, Easter and Mother's Day, $125 with vase and free Phoenix delivery. Or 100 roses for $275."
+        path="/bouquets"
+      />
       <PageHeader
         eyebrow="What we make"
         title="Bouquets & arrangements"

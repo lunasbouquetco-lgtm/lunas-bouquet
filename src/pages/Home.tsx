@@ -4,6 +4,7 @@ import Reveal from '@/components/Reveal'
 import hero from '@/assets/hero.jpg'
 import bloom from '@/assets/bloom.jpg'
 import band from '@/assets/band.jpg'
+import PageMeta from '@/components/PageMeta'
 
 const occasions = [
   { name: "Valentine's Day", note: 'February' },
@@ -29,6 +30,11 @@ const testimonials = [
 export default function Home() {
   return (
     <>
+      <PageMeta
+        title="Luna's Bouquet — Fresh flowers delivered across Phoenix & Scottsdale"
+        description="Large, hand-tied seasonal arrangements from a Phoenix florist. Free delivery across the Phoenix metro including Scottsdale, with 48 hours notice."
+        path="/"
+      />
       {/* ---------- Hero ---------- */}
       <section className="relative flex min-h-[92vh] items-center overflow-hidden">
         <img

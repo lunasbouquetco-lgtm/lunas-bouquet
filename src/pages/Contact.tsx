@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Mail, MapPin, Clock, CreditCard } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import PageHeader from '@/components/PageHeader'
+import PageMeta from '@/components/PageMeta'
 
 const details = [
   {
@@ -37,6 +38,11 @@ const details = [
 export default function Contact() {
   return (
     <>
+      <PageMeta
+        title="Contact Luna's Bouquet — Phoenix & Scottsdale Florist"
+        description="Get in touch about holiday arrangements, weddings, or corporate and nonprofit events. Free delivery across the Phoenix metro including Scottsdale."
+        path="/contact"
+      />
       <PageHeader
         eyebrow="Say hello"
         title="Get in touch"

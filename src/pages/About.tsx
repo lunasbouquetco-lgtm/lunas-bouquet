@@ -4,10 +4,16 @@ import Reveal from '@/components/Reveal'
 import PageHeader from '@/components/PageHeader'
 import bloom from '@/assets/bloom.jpg'
 import { ahnaleighAbout } from '@/lib/media'
+import PageMeta from '@/components/PageMeta'
 
 export default function About() {
   return (
     <>
+      <PageMeta
+        title="Our Story — Ahnaleigh, Phoenix Florist | Luna's Bouquet"
+        description="Luna's Bouquet began with a girl and a love of flowers. Ahnaleigh designs for holidays, weddings, and corporate and nonprofit events across the Phoenix metro."
+        path="/about"
+      />
       <PageHeader
         eyebrow="Our story"
         title="Meet Ahnaleigh"

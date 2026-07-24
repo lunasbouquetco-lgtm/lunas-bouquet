@@ -14,6 +14,7 @@ import {
   type Size,
 } from '@/lib/arrangements'
 import { submitOrder } from '@/lib/submitOrder'
+import PageMeta from '@/components/PageMeta'
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
 
@@ -99,8 +100,16 @@ export default function Order() {
     return <SuccessView name={form.customerName} />
   }
 
+  // The bottom padding sits on this outer wrapper rather than only on the form column:
+  // the floral aside is a grid item, so it stretches to the bottom of the grid and would
+  // otherwise butt straight into the dark footer with no breathing room between them.
   return (
-    <div className="bg-ivory pt-28 sm:pt-32">
+    <div className="bg-ivory pb-20 pt-28 sm:pb-28 sm:pt-32">
+      <PageMeta
+        title="Order Flowers for Delivery in Phoenix | Luna's Bouquet"
+        description="Reserve a seasonal arrangement or a 100-rose bouquet for any holiday. Free delivery across the Phoenix metro and Scottsdale. No payment until Ahnaleigh confirms your order."
+        path="/order"
+      />
       <div className="mx-auto grid max-w-7xl gap-0 px-0 lg:grid-cols-[0.85fr_1.15fr]">
         {/* Left: floral panel */}
         <aside className="relative hidden lg:block">
