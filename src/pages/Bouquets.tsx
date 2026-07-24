@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Check } from 'lucide-react'
 import Reveal from '@/components/Reveal'
-import PageHeader from '@/components/PageHeader'
 import Gallery from '@/components/Gallery'
 import LoopingVideo from '@/components/LoopingVideo'
 import { HOLIDAY_ARRANGEMENTS, ROSE_PRICE, ROSE_COUNT } from '@/lib/arrangements'
 import { HOLIDAY_MEDIA, ahnaleighVideo } from '@/lib/media'
+import hero from '@/assets/hero.jpg'
 import PageMeta from '@/components/PageMeta'
 
 // Sourced from arrangements.ts rather than repeated here — this page and the order form
@@ -65,14 +65,30 @@ export default function Bouquets() {
         description="Seasonal arrangements for Thanksgiving, Christmas, Valentine's Day, Easter and Mother's Day, $125 with vase and free Phoenix delivery. Or 100 roses for $275."
         path="/bouquets"
       />
-      <PageHeader
-        eyebrow="What we make"
-        title="Bouquets & arrangements"
-        subtitle="Large, seasonal arrangements for the moments that matter, plus custom work and events."
-      />
+      {/* Full-bleed hero — flowers behind a floating card, details flow down from here */}
+      <section className="relative flex min-h-[74vh] items-center justify-center overflow-hidden">
+        <img
+          src={hero}
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        {/* Soft wash so the card reads cleanly over any part of the image */}
+        <div className="absolute inset-0 bg-gradient-to-b from-plum/30 via-plum/10 to-ivory/40" />
+        <Reveal className="relative mx-5 mt-16 max-w-2xl rounded-sm bg-ivory/90 px-8 py-14 text-center shadow-[0_50px_100px_-55px_rgba(58,33,48,0.75)] backdrop-blur-[2px] sm:px-16 sm:py-16">
+          <p className="label text-gold">What we make</p>
+          <h1 className="mt-5 font-display text-5xl leading-tight text-plum sm:text-6xl">
+            Bouquets &amp; arrangements
+          </h1>
+          <p className="mx-auto mt-6 max-w-xl font-body text-xl leading-relaxed text-ink/75">
+            Large, seasonal arrangements for the moments that matter, plus custom work and events.
+          </p>
+          <div className="mx-auto mt-9 h-px w-16 bg-gold/40" />
+        </Reveal>
+      </section>
 
       {/* Seasonal arrangements */}
-      <section className="bg-ivory pb-8">
+      <section className="bg-ivory pb-8 pt-20 sm:pt-24">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 sm:px-8 lg:grid-cols-2 lg:gap-16">
           <Reveal>
             <p className="label text-gold">Seasonal arrangements</p>
