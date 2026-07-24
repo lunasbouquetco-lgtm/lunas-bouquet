@@ -26,8 +26,14 @@ type Row = {
 export default guarded(async (db, req, res) => {
   const body = (typeof req.body === 'string' ? JSON.parse(req.body) : req.body) as {
     orders?: Row[]
+    b64?: string
   }
-  const rows = body?.orders ?? []
+  // Accept either a plain orders array or a base64-encoded one. The base64 form exists
+  // only so the payload can be sent without shell-quoting hazards (apostrophes in card
+  // messages); it decodes to the same array.
+  const rows: Row[] = body?.b64
+    ? (JSON.parse(Buffer.from(body.b64, 'base64').toString('utf8')) as Row[])
+    : (body?.orders ?? [])
   if (!Array.isArray(rows) || rows.length === 0) {
     res.status(400).json({ error: 'No orders provided.' })
     return
