@@ -83,3 +83,42 @@ guard is already the only gate.
   visually checked. The layouts use wrapping grids, but that is reasoning, not proof.
 - **A real order end to end** — placing an order and watching customer, recipient, and
   order rows appear. Blocked on the migration.
+
+---
+
+## Historical import (done 2026-07-24, overnight)
+
+Annie's Google Form export was imported into the order book:
+
+- **19 customers**, **34 orders**, all marked `status='delivered'` / `source='legacy'`
+  with their real submission dates, so they read as history and don't show up as work
+  to do. "Needs attention" is 0.
+- **7 gate codes** were dug out of wherever they were hiding — delivery instructions,
+  buried inside address text ("Gate code: 3986"), and a bare `#1234#` — and now live in
+  the recipient's own `gate_code` field. Spot-verified: Kristin Heitz #3424,
+  Carol Glantz #3986, Yasaman #2001.
+- Apartment numbers were deliberately NOT treated as gate codes (e.g. "312 S Hardy Dr
+  **#105**" is a unit, not a gate). That distinction is why the extraction is a
+  whitelist of "gate"-context matches rather than any `#1234`.
+- Repeat customers collapsed correctly: Ashley Trussell 6 orders, Grace Heitz 4,
+  Jeremy Jondahl 3 (his family).
+
+**Not imported:** a handful of rows with no usable address — the July "Pop-up Flower
+Event" signups and a couple of junk rows (".", "Me"/"Mine"). They carried no recipient
+address or order detail worth keeping. The "Total Orders" tab (payment amounts /
+paid-unpaid status) was also left out; that's a separate follow-up if Annie wants
+historical revenue in the book.
+
+The import ran through a temporary `/api/admin/import` endpoint which has since been
+**removed**. No customer data is stored in this repo — the repo is public, and the
+records live only in Supabase.
+
+## Editing and deleting orders
+
+The order list now supports more than moving statuses along:
+
+- **Edit** — card message and delivery instructions, inline.
+- **Delete** — two clicks ("Delete" → "Yes, delete") so a stray tap can't erase a real
+  order.
+
+Recipients (address, gate code, notes) are still edited from the customer detail page.
