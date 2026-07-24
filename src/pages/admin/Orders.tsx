@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Loader2, Pencil, Trash2, Check, X } from 'lucide-react'
+import { Loader2, Pencil, Trash2, Check, X, ArrowUpDown } from 'lucide-react'
 import {
   getOrders,
   setOrderStatus,
@@ -28,15 +28,16 @@ const NEXT: Partial<Record<OrderStatus, OrderStatus>> = {
 export default function Orders() {
   const [orders, setOrders] = useState<Order[] | null>(null)
   const [filter, setFilter] = useState('')
+  const [sort, setSort] = useState<'newest' | 'oldest'>('newest')
   const [error, setError] = useState('')
   const [busyId, setBusyId] = useState('')
 
   const load = useCallback(() => {
     setError('')
-    getOrders(filter)
+    getOrders(filter, sort)
       .then((r) => setOrders(r.orders))
       .catch((e) => setError(e instanceof Error ? e.message : 'Could not load.'))
-  }, [filter])
+  }, [filter, sort])
 
   useEffect(load, [load])
 
@@ -58,7 +59,7 @@ export default function Orders() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h2 className="font-display text-2xl text-plum">Orders</h2>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {FILTERS.map((f) => (
             <button
               key={f.value}
@@ -74,6 +75,16 @@ export default function Orders() {
               {f.label}
             </button>
           ))}
+          {/* Sort toggle, set apart from the status filters by a hairline. */}
+          <span className="mx-1 h-5 w-px bg-edge" aria-hidden />
+          <button
+            type="button"
+            onClick={() => setSort((s) => (s === 'newest' ? 'oldest' : 'newest'))}
+            className="label inline-flex items-center gap-1.5 rounded-full border border-edge px-4 py-1.5 text-[0.58rem] text-muted transition-colors hover:border-gold hover:text-gold"
+          >
+            <ArrowUpDown size={12} />
+            {sort === 'newest' ? 'Newest first' : 'Oldest first'}
+          </button>
         </div>
       </div>
 

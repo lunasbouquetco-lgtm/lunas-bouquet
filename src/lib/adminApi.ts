@@ -108,8 +108,10 @@ export const getCustomer = (id: string) =>
     `/api/admin/customer?id=${encodeURIComponent(id)}`
   )
 
-export const getOrders = (status = '') =>
-  call<{ orders: Order[] }>(`/api/admin/orders?status=${encodeURIComponent(status)}`)
+export const getOrders = (status = '', sort: 'newest' | 'oldest' = 'newest') =>
+  call<{ orders: Order[] }>(
+    `/api/admin/orders?status=${encodeURIComponent(status)}&sort=${sort}`
+  )
 
 export const setOrderStatus = (id: string, status: OrderStatus) =>
   call<{ ok: true }>('/api/admin/orders', {

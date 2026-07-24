@@ -76,6 +76,8 @@ export default guarded(async (db, req, res) => {
   }
 
   const status = query(req, 'status')
+  // Sort defaults to newest first; ?sort=oldest flips it.
+  const ascending = query(req, 'sort') === 'oldest'
   let sel = db
     .from('orders')
     .select(
@@ -83,7 +85,7 @@ export default guarded(async (db, req, res) => {
         'delivery_instructions, customer_id, customer_name, customer_email, customer_phone, ' +
         'recipient_name, recipient_address'
     )
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending })
     .limit(200)
 
   if (status && STATUSES.includes(status as (typeof STATUSES)[number])) {
