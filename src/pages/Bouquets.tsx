@@ -10,9 +10,11 @@ import PageMeta from '@/components/PageMeta'
 
 // Sourced from arrangements.ts rather than repeated here — this page and the order form
 // drifting apart on delivery dates is exactly the bug worth designing out.
-const holidays = HOLIDAY_ARRANGEMENTS.filter((a) => a.id !== 'monthly-subscription').map(
-  (a) => ({ id: a.id, name: a.label, when: a.delivery })
-)
+const holidays = HOLIDAY_ARRANGEMENTS.map((a) => ({
+  id: a.id,
+  name: a.label,
+  when: a.delivery,
+}))
 
 // Some holidays are a photo, some are a short clip of the real arrangement. Videos are
 // muted and carry no audio track at all (see scripts/prepare-media.mjs), which is also
@@ -136,30 +138,11 @@ export default function Bouquets() {
 
       <Gallery />
 
-      {/* Subscription + Custom */}
+      {/* Custom & events. The monthly subscription card used to sit beside this one;
+          removed 2026-07-23 because nobody ordered it. Custom now runs full width. */}
       <section className="bg-champagne/50 py-24 sm:py-28">
-        <div className="mx-auto grid max-w-7xl gap-6 px-6 sm:px-8 lg:grid-cols-2">
+        <div className="mx-auto max-w-3xl px-6 sm:px-8">
           <Reveal as="article">
-            <div className="flex h-full flex-col rounded-sm border border-gold/20 bg-surface p-9">
-              <p className="label text-gold">Monthly</p>
-              <h3 className="mt-4 font-display text-3xl text-plum">Flower subscription</h3>
-              <p className="mt-2 font-display text-xl text-rosewood">$125 / month</p>
-              <p className="prose-serif mt-5 flex-1">
-                <span>
-                  A fresh arrangement delivered the first Friday of every month. The easiest way to
-                  keep something beautiful on the table all year.
-                </span>
-              </p>
-              <Link
-                to="/order"
-                className="label mt-8 inline-flex items-center gap-2 text-plum transition-colors hover:text-gold"
-              >
-                Start a subscription <ArrowRight size={14} />
-              </Link>
-            </div>
-          </Reveal>
-
-          <Reveal as="article" delay={0.1}>
             <div className="flex h-full flex-col rounded-sm bg-plum p-9 text-ivory">
               <p className="label text-gold-light">Custom & events</p>
               <h3 className="mt-4 font-display text-3xl text-white">Weddings & gatherings</h3>

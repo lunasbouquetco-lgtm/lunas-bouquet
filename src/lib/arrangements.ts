@@ -31,12 +31,9 @@ export const HOLIDAY_ARRANGEMENTS: Arrangement[] = [
   { id: 'valentines', label: "Valentine's Day", delivery: 'Delivered Fri, Feb 12' },
   { id: 'easter', label: 'Easter', delivery: 'Delivered Fri, Mar 26' },
   { id: 'mothers-day', label: "Mother's Day", delivery: 'Delivered Fri, May 7' },
-  {
-    id: 'monthly-subscription',
-    label: 'Monthly Subscription',
-    delivery: 'Delivered the first Friday of each month',
-  },
 ]
+// The monthly subscription was removed 2026-07-23: nobody ordered it, and an option
+// that never converts still costs every customer a moment of consideration.
 
 export const CUSTOM_OPTION: Arrangement = {
   id: 'custom-event',
