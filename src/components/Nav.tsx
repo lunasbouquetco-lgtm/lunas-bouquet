@@ -42,7 +42,7 @@ export default function Nav() {
 
         {/* Center mark */}
         <Link to="/" className="shrink-0" aria-label="Luna's Bouquet home">
-          <img src={markGold} alt="Luna's Bouquet" className="h-11 w-auto sm:h-14" />
+          <img src={markGold} alt="Luna's Bouquet" className="h-16 w-auto sm:h-20" />
         </Link>
 
         {/* Right links (desktop) */}

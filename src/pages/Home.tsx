@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import hero from '@/assets/hero.jpg'
-import bloom from '@/assets/bloom.jpg'
 import band from '@/assets/band.jpg'
 import PageMeta from '@/components/PageMeta'
+import LoopingVideo from '@/components/LoopingVideo'
+import { ahnaleighVideo } from '@/lib/media'
 
 const occasions = [
   { name: "Valentine's Day", note: 'February' },
@@ -12,7 +13,7 @@ const occasions = [
   { name: 'Easter', note: 'Spring' },
   { name: 'Thanksgiving', note: 'November' },
   { name: 'Christmas', note: 'December' },
-  { name: 'Weddings & Events', note: 'Year-round' },
+  { name: 'Events & Custom', note: 'Year-round' },
 ]
 
 const testimonials = [
@@ -153,9 +154,10 @@ export default function Home() {
 
           <Reveal className="order-1 lg:order-2" delay={0.1}>
             <div className="overflow-hidden rounded-sm shadow-[0_30px_70px_-40px_rgba(58,33,48,0.6)]">
-              <img
-                src={bloom}
-                alt="A detail of a Luna's Bouquet arrangement"
+              <LoopingVideo
+                src={ahnaleighVideo.src}
+                poster={ahnaleighVideo.poster}
+                alt={ahnaleighVideo.alt}
                 className="h-[420px] w-full object-cover sm:h-[540px]"
               />
             </div>

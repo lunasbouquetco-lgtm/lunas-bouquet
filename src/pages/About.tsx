@@ -12,7 +12,7 @@ export default function About() {
     <>
       <PageMeta
         title="Our Story — Ahnaleigh, Phoenix Florist | Luna's Bouquet"
-        description="Luna's Bouquet began with a girl and a love of flowers. Ahnaleigh designs for holidays, weddings, and corporate and nonprofit events across the Phoenix metro."
+        description="Luna's Bouquet began with a girl and a love of flowers. Ahnaleigh designs holiday arrangements, plus corporate and nonprofit events, across the Phoenix metro."
         path="/about"
       />
       <PageHeader
@@ -42,25 +42,23 @@ export default function About() {
         <div className="mx-auto max-w-2xl px-6 sm:px-8">
           <Reveal className="prose-serif">
             <p>
-              Luna&apos;s Bouquet began with a girl and a love of flowers. Ahnaleigh discovered
-              floral design at fifteen, and found something that was entirely her own: a way to make
-              beauty with her hands, and to make people&apos;s days a little brighter.
+              Luna&apos;s Bouquet began with me and a love of flowers. I discovered floral design at
+              fifteen, and found something that was entirely my own &mdash; a way to make beauty with
+              my hands, and to brighten someone&apos;s day.
             </p>
             <p>
-              She grew up in foster care, and she is building this business with real ambition,
-              saving toward her first car and a future she is designing herself. Every arrangement
-              she makes is a step toward it.
+              I grew up in foster care, and I&apos;m building this business with real ambition,
+              saving toward my first car and a future I&apos;m designing myself. Every arrangement I
+              make is a step toward it.
             </p>
             <p>
-              She has designed for weddings and gatherings, and for corporate and nonprofit
-              events, and
-              she is growing a loyal base of people who come back season after season. Her work
-              speaks for itself. It is fresh, generous, and made with genuine care.
+              I&apos;ve designed for parties and gatherings, and for corporate and nonprofit events,
+              and I&apos;m growing a loyal base of people who come back season after season. I pour
+              genuine care into every arrangement &mdash; fresh, generous, and made by hand.
             </p>
             <p>
               When you order from Luna&apos;s Bouquet, you get some of the most beautiful flowers in
-              the valley, and you help a young entrepreneur build something lasting. That is a good
-              trade.
+              the valley, and you help me build something lasting. That means the world to me.
             </p>
           </Reveal>
 

@@ -150,12 +150,12 @@ export default function Bouquets() {
           <Reveal as="article">
             <div className="flex h-full flex-col rounded-sm bg-plum p-9 text-ivory">
               <p className="label text-gold-light">Custom & events</p>
-              <h3 className="mt-4 font-display text-3xl text-white">Weddings & gatherings</h3>
+              <h3 className="mt-4 font-display text-3xl text-white">Events & custom designs</h3>
               <p className="mt-2 font-display text-xl text-gold-light">From $375</p>
               <p className="mt-5 flex-1 font-body text-lg leading-relaxed text-ivory/80">
-                Weddings, corporate events, parties, and one-off designs made just for you. Tell us
-                what you are dreaming of and we will design around it. Custom orders start at a $375
-                minimum.
+                Corporate and nonprofit events, parties, gatherings, and one-off designs made just
+                for you. Tell us what you are dreaming of and we will design around it. Custom orders
+                start at a $375 minimum.
               </p>
               <Link
                 to="/order"

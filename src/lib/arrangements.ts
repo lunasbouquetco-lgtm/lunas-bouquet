@@ -38,7 +38,7 @@ export const HOLIDAY_ARRANGEMENTS: Arrangement[] = [
 export const CUSTOM_OPTION: Arrangement = {
   id: 'custom-event',
   label: 'Custom arrangement or event',
-  delivery: `Weddings, gatherings, and one-off designs. From $${CUSTOM_MINIMUM}.`,
+  delivery: `Events, gatherings, and one-off designs. From $${CUSTOM_MINIMUM}.`,
 }
 
 // Estimate for the seasonal arrangements only (custom/event is quoted separately).

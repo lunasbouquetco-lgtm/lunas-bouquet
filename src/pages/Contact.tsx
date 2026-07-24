@@ -1,6 +1,6 @@
 import InstagramIcon from '@/components/InstagramIcon'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Mail, MapPin, Clock, CreditCard } from 'lucide-react'
+import { ArrowRight, Mail, MapPin, CreditCard } from 'lucide-react'
 import Reveal from '@/components/Reveal'
 import PageHeader from '@/components/PageHeader'
 import PageMeta from '@/components/PageMeta'
@@ -24,11 +24,6 @@ const details = [
     lines: ['Phoenix Metro & Scottsdale', 'Free delivery'],
   },
   {
-    icon: Clock,
-    title: 'Notice',
-    lines: ['Please allow 48 hours', 'for every order'],
-  },
-  {
     icon: CreditCard,
     title: 'Payment',
     lines: ['Venmo, Zelle,', 'check, or cash'],
@@ -40,7 +35,7 @@ export default function Contact() {
     <>
       <PageMeta
         title="Contact Luna's Bouquet — Phoenix & Scottsdale Florist"
-        description="Get in touch about holiday arrangements, weddings, or corporate and nonprofit events. Free delivery across the Phoenix metro including Scottsdale."
+        description="Get in touch about holiday arrangements, or corporate and nonprofit events. Free delivery across the Phoenix metro including Scottsdale."
         path="/contact"
       />
       <PageHeader
@@ -86,15 +81,15 @@ export default function Contact() {
             })}
           </div>
 
-          <Reveal className="mt-14 rounded-sm bg-plum px-8 py-14 text-center text-ivory sm:px-12">
-            <h2 className="font-display text-3xl text-white sm:text-4xl">Ready to order?</h2>
-            <p className="mx-auto mt-4 max-w-md font-body text-xl text-ivory/80">
+          <Reveal className="mt-14 rounded-sm border border-gold/25 bg-champagne/60 px-8 py-14 text-center sm:px-12">
+            <h2 className="font-display text-3xl text-plum sm:text-4xl">Ready to order?</h2>
+            <p className="mx-auto mt-4 max-w-md font-body text-xl text-ink/75">
               Skip the back and forth. Place your order and Ahnaleigh will reach out to confirm the
               details.
             </p>
             <Link
               to="/order"
-              className="label mt-8 inline-flex items-center gap-2 rounded-full bg-gold-light px-8 py-4 text-plum transition-colors hover:bg-white"
+              className="label mt-8 inline-flex items-center gap-2 rounded-full bg-rosewood px-8 py-4 text-white transition-colors hover:bg-rosewood-dark"
             >
               Start your order <ArrowRight size={15} />
             </Link>
