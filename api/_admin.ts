@@ -1,3 +1,4 @@
+/// <reference types="node" />
 // Shared server-side logic for /api/admin/*.
 //
 // Why this exists at all: the browser holds the Supabase anon key, and RLS gives anon

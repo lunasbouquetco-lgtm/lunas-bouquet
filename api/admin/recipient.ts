@@ -1,4 +1,4 @@
-import { guarded } from '../_admin'
+import { guarded } from '../_admin.js'
 
 // Gate codes change, people move, "leave it with the neighbor" becomes "ring twice".
 // Annie edits a recipient here. Only these fields are writable — the customer link and

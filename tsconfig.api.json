@@ -3,8 +3,11 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.api.tsbuildinfo",
     "target": "es2023",
     "lib": ["ES2023"],
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    // nodenext, not bundler — Vercel compiles this folder with Node's own module rules,
+    // which demand explicit .js extensions on relative imports. Using "bundler" here let
+    // a build pass locally and then fail in production, so local now matches deploy.
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "types": ["node"],
     "strict": true,
     "skipLibCheck": true,

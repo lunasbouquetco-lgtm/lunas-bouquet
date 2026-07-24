@@ -1,4 +1,4 @@
-import { guarded, type Req } from '../_admin'
+import { guarded, type Req } from '../_admin.js'
 
 function query(req: Req, key: string): string {
   // Vercel gives us req.query; the dev plugin passes the parsed URL the same way.

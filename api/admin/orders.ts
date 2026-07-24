@@ -1,4 +1,4 @@
-import { guarded, type Req } from '../_admin'
+import { guarded, type Req } from '../_admin.js'
 
 function query(req: Req, key: string): string {
   const q = (req as unknown as { query?: Record<string, string | string[]> }).query ?? {}

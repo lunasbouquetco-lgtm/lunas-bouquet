@@ -1,4 +1,4 @@
-import { guarded } from '../_admin'
+import { guarded } from '../_admin.js'
 
 // The dashboard's top numbers. Counts come back as head-only queries so we're not
 // pulling every row across the wire just to length it.

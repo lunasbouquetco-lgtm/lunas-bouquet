@@ -1,4 +1,4 @@
-import { checkPassword, type Req, type Res } from '../_admin'
+import { checkPassword, type Req, type Res } from '../_admin.js'
 
 // The password screen posts here once. There's no session to create — every later
 // request re-sends the password header and is re-checked — so this just answers

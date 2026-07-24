@@ -3,8 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon-256.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>scaffold</title>
+    <meta name="theme-color" content="#3a2130" />
+
+    <title>Luna's Bouquet — Fresh flowers, delivered across Phoenix</title>
+    <meta
+      name="description"
+      content="Large, seasonal flower arrangements for the holidays, plus weddings, events and custom designs. Free delivery across the Phoenix metro, including Scottsdale."
+    />
+    <link rel="canonical" href="https://lunasbouquet.com/" />
+
+    <!-- What shows when someone shares the site in a text or on social. Without these
+         a link preview falls back to a bare URL, which reads like spam. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Luna's Bouquet" />
+    <meta property="og:title" content="Luna's Bouquet — Fresh flowers, delivered across Phoenix" />
+    <meta
+      property="og:description"
+      content="Large, seasonal flower arrangements for the holidays, plus weddings, events and custom designs. Free delivery across the Phoenix metro."
+    />
+    <meta property="og:url" content="https://lunasbouquet.com/" />
+    <meta property="og:image" content="https://lunasbouquet.com/media/social-card.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Tells Google this is a real local florist rather than a generic page. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Florist",
+        "name": "Luna's Bouquet",
+        "url": "https://lunasbouquet.com/",
+        "email": "lunasbouquet.co@gmail.com",
+        "areaServed": "Phoenix Metropolitan Area, including Scottsdale",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Phoenix",
+          "addressRegion": "AZ",
+          "addressCountry": "US"
+        },
+        "sameAs": ["https://www.instagram.com/lunas_bouquet12"]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
