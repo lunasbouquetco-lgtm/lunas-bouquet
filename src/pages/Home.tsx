@@ -5,6 +5,7 @@ import hero from '@/assets/hero.jpg'
 import band from '@/assets/band.jpg'
 import PageMeta from '@/components/PageMeta'
 import LoopingVideo from '@/components/LoopingVideo'
+import Testimonials from '@/components/Testimonials'
 import { ahnaleighVideo } from '@/lib/media'
 
 const occasions = [
@@ -166,23 +167,7 @@ export default function Home() {
       </section>
 
       {/* ---------- Testimonials ---------- */}
-      <section className="bg-plum py-24 text-ivory sm:py-32">
-        <div className="mx-auto max-w-5xl px-6 sm:px-8">
-          <Reveal className="text-center">
-            <p className="label text-gold-light">Kind words</p>
-          </Reveal>
-          <div className="mt-14 grid gap-10 md:grid-cols-2 md:gap-14">
-            {testimonials.map((t, i) => (
-              <Reveal as="figure" key={t.name} delay={i * 0.1}>
-                <blockquote className="font-body text-2xl italic leading-relaxed text-ivory/90 sm:text-[1.7rem]">
-                  &ldquo;{t.quote}&rdquo;
-                </blockquote>
-                <figcaption className="label mt-6 text-gold-light">{t.name}</figcaption>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Testimonials items={testimonials} />
 
       {/* ---------- CTA band ---------- */}
       <section className="relative overflow-hidden">
