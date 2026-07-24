@@ -51,6 +51,35 @@ export default guarded(async (db, req, res) => {
   > & { id?: string }
 
   if (req.method === 'POST') {
+    // Bulk load (base64, to dodge shell-quoting on apostrophes) — used once to seed the
+    // historical events. Idempotent-ish: skips a row whose (name, event_date) already
+    // exists, so re-seeding doesn't duplicate.
+    if (typeof body.b64 === 'string') {
+      const list = JSON.parse(Buffer.from(body.b64, 'base64').toString('utf8')) as Record<
+        string,
+        unknown
+      >[]
+      let created = 0
+      let skipped = 0
+      for (const raw of list) {
+        const patch = clean(raw)
+        const { data: exists } = await db
+          .from('events')
+          .select('id')
+          .eq('name', patch.name as string)
+          .eq('event_date', (patch.event_date as string) ?? null)
+          .maybeSingle()
+        if (exists) {
+          skipped++
+          continue
+        }
+        await db.from('events').insert(patch)
+        created++
+      }
+      res.status(200).json({ ok: true, created, skipped })
+      return
+    }
+
     const patch = clean(body)
     if (!patch.name) patch.name = 'New event'
     const { data, error } = await db.from('events').insert(patch).select('id').single()
