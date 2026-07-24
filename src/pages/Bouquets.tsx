@@ -77,13 +77,15 @@ export default function Bouquets() {
 
         {/* Content pulled up into the blend, full-width and centered */}
         <div className="relative z-10 mx-auto -mt-28 max-w-4xl px-6 pb-4 text-center sm:-mt-36 sm:px-8">
-          <Reveal>
+          {/* Soft ivory halo behind the heading — feathered so it bleeds into the image
+              rather than sitting on it as a hard box, keeping the text readable. */}
+          <Reveal className="rounded-[50%] px-6 py-10 [background:radial-gradient(ellipse_75%_75%_at_50%_45%,rgba(246,241,231,0.94)_0%,rgba(246,241,231,0.6)_45%,transparent_72%)] sm:px-10">
             <p className="label text-gold">Seasonal arrangements</p>
             <h1 className="mt-4 font-display text-5xl leading-tight text-plum sm:text-6xl">
               Holiday bouquets
             </h1>
             <p className="mt-3 font-display text-2xl text-rosewood sm:text-3xl">$125 each</p>
-            <p className="mx-auto mt-6 max-w-2xl font-body text-xl leading-relaxed text-ink/75">
+            <p className="mx-auto mt-6 max-w-2xl font-body text-xl leading-relaxed text-ink/80">
               For each holiday, we design a large, generous arrangement from the season&apos;s finest
               flowers. Reserve yours ahead, and we deliver it fresh on the date.
             </p>
