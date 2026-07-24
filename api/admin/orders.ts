@@ -7,26 +7,58 @@ function query(req: Req, key: string): string {
 }
 
 const STATUSES = ['new', 'confirmed', 'paid', 'delivered', 'cancelled'] as const
+// Fields Annie may edit on an order. The customer/recipient links and timestamps are
+// not editable here — those belong to the customer and recipient records.
+const EDITABLE = ['status', 'card_message', 'delivery_instructions', 'admin_notes'] as const
 
-// GET  → the order list, newest first, optionally filtered by status.
-// PATCH → move one order along ('new' → 'confirmed' → 'paid' → 'delivered').
+// GET    → the order list, newest first, optionally filtered by status.
+// PATCH  → edit an order (status, card message, delivery instructions, admin notes).
+// DELETE → remove an order for good.
 export default guarded(async (db, req, res) => {
   if (req.method === 'PATCH') {
-    const body = (typeof req.body === 'string' ? JSON.parse(req.body) : req.body) as {
-      id?: string
-      status?: string
-    }
-    if (!body?.id || !body?.status) {
-      res.status(400).json({ error: 'Missing id or status.' })
+    const body = (typeof req.body === 'string' ? JSON.parse(req.body) : req.body) as Record<
+      string,
+      unknown
+    > & { id?: string }
+    if (!body?.id) {
+      res.status(400).json({ error: 'Missing order id.' })
       return
     }
-    // Whitelist rather than trusting the client — the column is an enum, and an
-    // unknown value should read as a bad request, not a database error.
-    if (!STATUSES.includes(body.status as (typeof STATUSES)[number])) {
+    // Whitelist status — the column is an enum, so an unknown value should read as a bad
+    // request, not a database error.
+    if (
+      body.status !== undefined &&
+      !STATUSES.includes(body.status as (typeof STATUSES)[number])
+    ) {
       res.status(400).json({ error: 'Unknown status.' })
       return
     }
-    const { error } = await db.from('orders').update({ status: body.status }).eq('id', body.id)
+    const patch: Record<string, unknown> = {}
+    for (const key of EDITABLE) {
+      if (key in body) patch[key] = body[key] === '' ? null : body[key]
+    }
+    if (Object.keys(patch).length === 0) {
+      res.status(400).json({ error: 'Nothing to update.' })
+      return
+    }
+    const { error } = await db.from('orders').update(patch).eq('id', body.id)
+    if (error) {
+      res.status(500).json({ error: error.message })
+      return
+    }
+    res.status(200).json({ ok: true })
+    return
+  }
+
+  if (req.method === 'DELETE') {
+    const body = (typeof req.body === 'string' ? JSON.parse(req.body) : req.body) as {
+      id?: string
+    }
+    if (!body?.id) {
+      res.status(400).json({ error: 'Missing order id.' })
+      return
+    }
+    const { error } = await db.from('orders').delete().eq('id', body.id)
     if (error) {
       res.status(500).json({ error: error.message })
       return

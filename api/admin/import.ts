@@ -80,6 +80,9 @@ export default guarded(async (db, req, res) => {
       }
 
       // --- recipient: find by (customer, name, address); create if absent ---
+      // The lookup and the insert MUST use the same address fallback, or a blank-address
+      // recipient is never found on re-run and collides on the unique constraint.
+      const addressValue = row.recipient_address || '(address not on file)'
       let recipientId: string | null = null
       {
         const { data } = await db
@@ -87,7 +90,7 @@ export default guarded(async (db, req, res) => {
           .select('id, gate_code, delivery_notes')
           .eq('customer_id', customerId)
           .ilike('name', row.recipient_name)
-          .eq('address', row.recipient_address || '')
+          .eq('address', addressValue)
           .maybeSingle()
         if (data) {
           recipientId = data.id
@@ -104,7 +107,7 @@ export default guarded(async (db, req, res) => {
           .insert({
             customer_id: customerId,
             name: row.recipient_name,
-            address: row.recipient_address || '(address not on file)',
+            address: addressValue,
             gate_code: row.gate_code || null,
             delivery_notes: row.delivery_notes || null,
           })

@@ -117,6 +117,23 @@ export const setOrderStatus = (id: string, status: OrderStatus) =>
     body: JSON.stringify({ id, status }),
   })
 
+export const updateOrder = (
+  id: string,
+  patch: Partial<Pick<Order, 'card_message' | 'delivery_instructions'>> & {
+    admin_notes?: string
+  }
+) =>
+  call<{ ok: true }>('/api/admin/orders', {
+    method: 'PATCH',
+    body: JSON.stringify({ id, ...patch }),
+  })
+
+export const deleteOrder = (id: string) =>
+  call<{ ok: true }>('/api/admin/orders', {
+    method: 'DELETE',
+    body: JSON.stringify({ id }),
+  })
+
 export const updateRecipient = (id: string, patch: Partial<Recipient>) =>
   call<{ ok: true }>('/api/admin/recipient', {
     method: 'PATCH',
