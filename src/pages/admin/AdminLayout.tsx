@@ -31,6 +31,7 @@ export default function AdminLayout() {
             </Tab>
             <Tab to="/admin/orders">Orders</Tab>
             <Tab to="/admin/customers">Customers</Tab>
+            <Tab to="/admin/events">Events</Tab>
           </nav>
 
           <button

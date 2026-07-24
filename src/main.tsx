@@ -14,6 +14,7 @@ import Dashboard from './pages/admin/Dashboard.tsx'
 import AdminOrders from './pages/admin/Orders.tsx'
 import Customers from './pages/admin/Customers.tsx'
 import CustomerDetail from './pages/admin/CustomerDetail.tsx'
+import Events from './pages/admin/Events.tsx'
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
       { path: 'orders', element: <AdminOrders /> },
       { path: 'customers', element: <Customers /> },
       { path: 'customers/:id', element: <CustomerDetail /> },
+      { path: 'events', element: <Events /> },
     ],
   },
 ])

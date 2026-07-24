@@ -139,3 +139,60 @@ export const updateRecipient = (id: string, patch: Partial<Recipient>) =>
     method: 'PATCH',
     body: JSON.stringify({ id, ...patch }),
   })
+
+// ---------------------------------------------------------------- events roll-up
+
+export type EventRow = {
+  id: string
+  name: string
+  event_date: string | null
+  type: string | null
+  status: string
+  manual_orders: number
+  manual_revenue: number
+  expense_vases: number
+  expense_flowers: number
+  expense_misc: number
+  expense_detail: string | null
+  notes: string | null
+  // computed server-side
+  autoOrders: number
+  autoRevenue: number
+  orders: number
+  revenue: number
+  expenses: number
+  profit: number
+  margin: number | null
+  avgPerOrder: number | null
+}
+
+export type EventTotals = {
+  orders: number
+  revenue: number
+  expenses: number
+  profit: number
+  vases: number
+  flowers: number
+  misc: number
+}
+
+export const getEvents = () =>
+  call<{ events: EventRow[]; totals: EventTotals }>('/api/admin/events')
+
+export const createEvent = (patch: Partial<EventRow>) =>
+  call<{ ok: true; id: string }>('/api/admin/events', {
+    method: 'POST',
+    body: JSON.stringify(patch),
+  })
+
+export const updateEvent = (id: string, patch: Partial<EventRow>) =>
+  call<{ ok: true }>('/api/admin/events', {
+    method: 'PATCH',
+    body: JSON.stringify({ id, ...patch }),
+  })
+
+export const deleteEvent = (id: string) =>
+  call<{ ok: true }>('/api/admin/events', {
+    method: 'DELETE',
+    body: JSON.stringify({ id }),
+  })
