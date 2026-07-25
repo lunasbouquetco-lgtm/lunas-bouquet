@@ -6,14 +6,30 @@ import { guarded } from '../_admin.js'
 const EDITABLE = ['name', 'address', 'gate_code', 'delivery_notes', 'relationship'] as const
 
 export default guarded(async (db, req, res) => {
-  if (req.method !== 'PATCH' && req.method !== 'POST') {
-    res.status(405).json({ error: 'Use PATCH.' })
-    return
-  }
-
   const body = (typeof req.body === 'string' ? JSON.parse(req.body) : req.body) as
     | (Record<string, unknown> & { id?: string })
     | undefined
+
+  if (req.method === 'DELETE') {
+    if (!body?.id) {
+      res.status(400).json({ error: 'Missing recipient id.' })
+      return
+    }
+    // Any orders pointing at this recipient keep their denormalized name/address; the
+    // FK just nulls out (on delete set null).
+    const { error } = await db.from('recipients').delete().eq('id', body.id)
+    if (error) {
+      res.status(500).json({ error: error.message })
+      return
+    }
+    res.status(200).json({ ok: true })
+    return
+  }
+
+  if (req.method !== 'PATCH' && req.method !== 'POST') {
+    res.status(405).json({ error: 'Use PATCH or DELETE.' })
+    return
+  }
 
   if (!body?.id) {
     res.status(400).json({ error: 'Missing recipient id.' })

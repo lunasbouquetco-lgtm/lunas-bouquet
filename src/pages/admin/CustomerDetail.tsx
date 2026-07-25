@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ArrowLeft, Loader2, Pencil, Check, X, KeyRound } from 'lucide-react'
+import { ArrowLeft, Loader2, Pencil, Trash2, Check, X, KeyRound } from 'lucide-react'
 import {
   getCustomer,
   updateRecipient,
+  deleteRecipient,
   type CustomerSummary,
   type Order,
   type Recipient,
@@ -106,9 +107,22 @@ export default function CustomerDetail() {
 
 function RecipientCard({ recipient, onSaved }: { recipient: Recipient; onSaved: () => void }) {
   const [editing, setEditing] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
   const [draft, setDraft] = useState(recipient)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+
+  async function remove() {
+    setBusy(true)
+    setError('')
+    try {
+      await deleteRecipient(recipient.id)
+      onSaved()
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not delete.')
+      setBusy(false)
+    }
+  }
 
   async function save() {
     setBusy(true)
@@ -164,10 +178,25 @@ function RecipientCard({ recipient, onSaved }: { recipient: Recipient; onSaved: 
               <X size={14} />
             </IconBtn>
           </div>
+        ) : confirmDelete ? (
+          <div className="flex shrink-0 items-center gap-2">
+            <span className="font-ui text-xs text-rosewood-dark">Delete?</span>
+            <IconBtn onClick={remove} disabled={busy} label="Confirm delete">
+              {busy ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
+            </IconBtn>
+            <IconBtn onClick={() => setConfirmDelete(false)} label="Keep">
+              <X size={14} />
+            </IconBtn>
+          </div>
         ) : (
-          <IconBtn onClick={() => setEditing(true)} label={`Edit ${recipient.name}`}>
-            <Pencil size={13} />
-          </IconBtn>
+          <div className="flex shrink-0 gap-2">
+            <IconBtn onClick={() => setEditing(true)} label={`Edit ${recipient.name}`}>
+              <Pencil size={13} />
+            </IconBtn>
+            <IconBtn onClick={() => setConfirmDelete(true)} label={`Delete ${recipient.name}`}>
+              <Trash2 size={13} />
+            </IconBtn>
+          </div>
         )}
       </div>
 

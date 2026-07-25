@@ -142,6 +142,12 @@ export const updateRecipient = (id: string, patch: Partial<Recipient>) =>
     body: JSON.stringify({ id, ...patch }),
   })
 
+export const deleteRecipient = (id: string) =>
+  call<{ ok: true }>('/api/admin/recipient', {
+    method: 'DELETE',
+    body: JSON.stringify({ id }),
+  })
+
 // ---------------------------------------------------------------- events roll-up
 
 export type EventRow = {
