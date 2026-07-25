@@ -110,7 +110,7 @@ export default function Events() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Revenue" value={money(totals.revenue)} />
         <Stat label="Expenses" value={money(totals.expenses)} />
-        <Stat label="Profit" value={money(totals.profit)} accent />
+        <Stat label="Profit" value={money(totals.profit)} tone={totals.profit >= 0 ? 'good' : 'bad'} />
         <Stat
           label="Margin"
           value={marginAll === null ? '—' : `${Math.round(marginAll * 100)}%`}
@@ -190,7 +190,11 @@ export default function Events() {
                 <td className="px-3 py-3 font-ui text-sm tabular-nums text-muted">
                   {money(totals.misc)}
                 </td>
-                <td className="px-3 py-3 font-display text-lg tabular-nums text-rosewood">
+                <td
+                  className={`px-3 py-3 font-display text-lg tabular-nums ${
+                    totals.profit >= 0 ? 'text-[#2f7a52]' : 'text-rosewood-dark'
+                  }`}
+                >
                   {money(totals.profit)}
                 </td>
                 <td />
@@ -308,7 +312,13 @@ function EventRowEditor({
       ))}
 
       <td className="px-3 py-1">
-        <span className="font-ui text-sm tabular-nums text-plum">{money(row.profit)}</span>
+        <span
+          className={`font-ui text-sm tabular-nums ${
+            row.profit >= 0 ? 'text-[#2f7a52]' : 'text-rosewood-dark'
+          }`}
+        >
+          {money(row.profit)}
+        </span>
         {row.margin !== null && (
           <span className="block font-ui text-[0.6rem] text-muted">
             {Math.round(row.margin * 100)}% margin
@@ -356,21 +366,20 @@ function Stat({
   label,
   value,
   hint,
-  accent,
+  tone,
 }: {
   label: string
   value: string
   hint?: string
-  accent?: boolean
+  // 'good' = positive money (green), 'bad' = in the red (rosewood). Default = plum ink.
+  tone?: 'good' | 'bad'
 }) {
+  const color =
+    tone === 'good' ? 'text-[#2f7a52]' : tone === 'bad' ? 'text-rosewood-dark' : 'text-plum'
   return (
     <div className="rounded-sm border border-edge bg-surface px-6 py-5">
       <p className="label text-[0.6rem] text-muted">{label}</p>
-      <p
-        className={`mt-2 font-display text-3xl tabular-nums ${accent ? 'text-rosewood' : 'text-plum'}`}
-      >
-        {value}
-      </p>
+      <p className={`mt-2 font-display text-3xl tabular-nums ${color}`}>{value}</p>
       {hint && <p className="mt-1 font-ui text-sm text-muted">{hint}</p>}
     </div>
   )
