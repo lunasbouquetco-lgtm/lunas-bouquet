@@ -61,10 +61,13 @@ export function ChartFrame({
 }
 
 /**
- * Stacked bars: each bar's full height is the event's REVENUE, split into profit
- * (kept) at the bottom and expenses (spent) on top. Stacking is honest here because
- * profit + expenses = revenue — unlike stacking revenue and profit, which would
- * double-count since profit is already inside revenue.
+ * Stacked bars, built with plain HTML rather than SVG. Each bar's full height is the
+ * event's REVENUE, split into profit (kept) at the bottom and cost (spent) on top.
+ * Stacking is honest this way because profit + cost = revenue — unlike stacking
+ * revenue and profit, which double-counts since profit is already inside revenue.
+ *
+ * HTML flex bars instead of SVG so rounded corners stay crisp and uniform — a stretched
+ * SVG viewBox distorts rounded rects into lopsided ovals on narrow bars.
  */
 export function RevenueProfitChart({
   data,
@@ -74,68 +77,55 @@ export function RevenueProfitChart({
   const [hover, setHover] = useState<number | null>(null)
   if (data.length === 0) return <Empty />
 
-  const H = 200
   const max = Math.max(...data.map((d) => d.revenue), 1)
-  const slot = 100 / data.length
-  const barW = Math.min(slot * 0.5, 6)
 
   return (
     <div className="relative">
-      <svg viewBox={`0 0 100 ${H}`} preserveAspectRatio="none" className="h-52 w-full">
+      <div className="relative flex h-52 items-end gap-[3px]">
+        {/* recessive gridlines behind the bars */}
         {[0.25, 0.5, 0.75, 1].map((t) => (
-          <line
+          <div
             key={t}
-            x1="0"
-            x2="100"
-            y1={H - t * H * 0.9}
-            y2={H - t * H * 0.9}
-            stroke="#e2d8c4"
-            strokeWidth="0.5"
-            vectorEffect="non-scaling-stroke"
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 border-t border-edge"
+            style={{ bottom: `${t * 100}%` }}
           />
         ))}
+
         {data.map((d, i) => {
-          const x = i * slot + slot / 2 - barW / 2
           const profit = Math.max(d.profit, 0)
-          const expenses = Math.max(d.revenue - profit, 0)
-          const ph = (profit / max) * H * 0.9
-          const eh = (expenses / max) * H * 0.9
-          const dim = hover === null || hover === i ? 1 : 0.4
+          const cost = Math.max(d.revenue - profit, 0)
+          const active = hover === null || hover === i
           return (
-            <g key={i} onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)}>
-              <rect x={i * slot} y="0" width={slot} height={H} fill="transparent" />
-              {/* profit at the base */}
-              <rect
-                x={x}
-                y={H - ph}
-                width={barW}
-                height={ph}
-                rx="1"
-                fill={SERIES.profit}
-                opacity={dim}
+            <div
+              key={i}
+              onMouseEnter={() => setHover(i)}
+              onMouseLeave={() => setHover(null)}
+              className="relative flex h-full flex-1 flex-col justify-end"
+              style={{ opacity: active ? 1 : 0.4 }}
+            >
+              {/* cost sits on top */}
+              <div
+                className="w-full rounded-t-[3px]"
+                style={{ height: `${(cost / max) * 100}%`, background: SERIES.revenue }}
               />
-              {/* expenses stacked above, with a 2px surface gap between segments */}
-              {eh > 0 && (
-                <rect
-                  x={x}
-                  y={H - ph - eh - 1}
-                  width={barW}
-                  height={eh}
-                  rx="1"
-                  fill={SERIES.revenue}
-                  opacity={dim}
-                />
-              )}
-            </g>
+              {/* 2px surface gap between the two segments */}
+              {cost > 0 && profit > 0 && <div className="h-[2px] w-full" />}
+              {/* profit at the base */}
+              <div
+                className={cost > 0 ? 'w-full' : 'w-full rounded-t-[3px]'}
+                style={{ height: `${(profit / max) * 100}%`, background: SERIES.profit }}
+              />
+            </div>
           )
         })}
-      </svg>
+      </div>
 
       {hover !== null && (
         <div
-          className="pointer-events-none absolute -top-1 z-10 rounded-sm border border-edge bg-ivory px-3 py-2 shadow-lg"
+          className="pointer-events-none absolute -top-2 z-10 rounded-sm border border-edge bg-ivory px-3 py-2 shadow-lg"
           style={{
-            left: `${Math.min(Math.max((hover + 0.5) * slot, 12), 88)}%`,
+            left: `${Math.min(Math.max(((hover + 0.5) / data.length) * 100, 14), 86)}%`,
             transform: 'translateX(-50%)',
           }}
         >
