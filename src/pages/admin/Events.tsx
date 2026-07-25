@@ -121,11 +121,11 @@ export default function Events() {
       {/* Charts */}
       <div className="grid gap-4 lg:grid-cols-[1.6fr_1fr]">
         <ChartFrame
-          title="Revenue and profit by event"
-          hint="Oldest to newest. Hover a pair for the numbers."
+          title="Revenue by event"
+          hint="Each bar is the event's revenue, split into profit and cost. Oldest to newest."
           legend={[
-            { label: 'Revenue', color: SERIES.revenue },
             { label: 'Profit', color: SERIES.profit },
+            { label: 'Cost', color: SERIES.revenue },
           ]}
         >
           <RevenueProfitChart data={chartData} />

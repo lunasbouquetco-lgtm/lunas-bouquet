@@ -60,7 +60,12 @@ export function ChartFrame({
   )
 }
 
-/** Grouped bars: revenue vs profit per event, newest last so time reads left→right. */
+/**
+ * Stacked bars: each bar's full height is the event's REVENUE, split into profit
+ * (kept) at the bottom and expenses (spent) on top. Stacking is honest here because
+ * profit + expenses = revenue — unlike stacking revenue and profit, which would
+ * double-count since profit is already inside revenue.
+ */
 export function RevenueProfitChart({
   data,
 }: {
@@ -70,14 +75,13 @@ export function RevenueProfitChart({
   if (data.length === 0) return <Empty />
 
   const H = 200
-  const max = Math.max(...data.map((d) => Math.max(d.revenue, d.profit)), 1)
+  const max = Math.max(...data.map((d) => d.revenue), 1)
   const slot = 100 / data.length
-  const barW = Math.min(slot * 0.34, 5)
+  const barW = Math.min(slot * 0.5, 6)
 
   return (
     <div className="relative">
       <svg viewBox={`0 0 100 ${H}`} preserveAspectRatio="none" className="h-52 w-full">
-        {/* recessive gridlines */}
         {[0.25, 0.5, 0.75, 1].map((t) => (
           <line
             key={t}
@@ -91,31 +95,37 @@ export function RevenueProfitChart({
           />
         ))}
         {data.map((d, i) => {
-          const x = i * slot
-          const rh = (d.revenue / max) * H * 0.9
-          const ph = (Math.max(d.profit, 0) / max) * H * 0.9
+          const x = i * slot + slot / 2 - barW / 2
+          const profit = Math.max(d.profit, 0)
+          const expenses = Math.max(d.revenue - profit, 0)
+          const ph = (profit / max) * H * 0.9
+          const eh = (expenses / max) * H * 0.9
+          const dim = hover === null || hover === i ? 1 : 0.4
           return (
             <g key={i} onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)}>
-              {/* generous invisible hit target */}
-              <rect x={x} y="0" width={slot} height={H} fill="transparent" />
+              <rect x={i * slot} y="0" width={slot} height={H} fill="transparent" />
+              {/* profit at the base */}
               <rect
-                x={x + slot / 2 - barW - 0.6}
-                y={H - rh}
-                width={barW}
-                height={rh}
-                rx="1"
-                fill={SERIES.revenue}
-                opacity={hover === null || hover === i ? 1 : 0.45}
-              />
-              <rect
-                x={x + slot / 2 + 0.6}
+                x={x}
                 y={H - ph}
                 width={barW}
                 height={ph}
                 rx="1"
                 fill={SERIES.profit}
-                opacity={hover === null || hover === i ? 1 : 0.45}
+                opacity={dim}
               />
+              {/* expenses stacked above, with a 2px surface gap between segments */}
+              {eh > 0 && (
+                <rect
+                  x={x}
+                  y={H - ph - eh - 1}
+                  width={barW}
+                  height={eh}
+                  rx="1"
+                  fill={SERIES.revenue}
+                  opacity={dim}
+                />
+              )}
             </g>
           )
         })}
@@ -131,7 +141,8 @@ export function RevenueProfitChart({
         >
           <p className="font-ui text-xs font-medium text-plum">{data[hover].label}</p>
           <p className="font-ui text-xs text-muted">
-            Revenue {money(data[hover].revenue)} · Profit {money(data[hover].profit)}
+            Revenue {money(data[hover].revenue)} · Profit {money(data[hover].profit)} · Cost{' '}
+            {money(data[hover].revenue - data[hover].profit)}
           </p>
         </div>
       )}
