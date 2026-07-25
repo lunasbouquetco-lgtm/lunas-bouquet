@@ -1,5 +1,10 @@
 import { supabase } from './supabase'
-import { describe, estimateTotal, type Selection } from './arrangements'
+import {
+  describe,
+  estimateTotal,
+  HOLIDAY_ARRANGEMENTS,
+  type Selection,
+} from './arrangements'
 
 export type OrderInput = {
   customerName: string
@@ -99,6 +104,12 @@ export async function submitOrder(
   // already seen the on-screen thank-you. A failure here (or the endpoint not being
   // configured yet) is swallowed so it can't turn a good order into an error.
   try {
+    // Include each arrangement's delivery date so the email can remind the customer
+    // when it's coming. Custom/event orders have no fixed date, so delivery is blank.
+    const arrangementLines = Object.entries(input.selection).map(([id, size]) => ({
+      label: describe(id, size),
+      delivery: HOLIDAY_ARRANGEMENTS.find((a) => a.id === id)?.delivery ?? '',
+    }))
     await fetch('/api/send-confirmation', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -106,7 +117,7 @@ export async function submitOrder(
         customerName: input.customerName,
         customerEmail: input.customerEmail,
         recipientName: input.recipientName,
-        arrangements: arrangementLabels,
+        arrangements: arrangementLines,
         estimatedTotal: estimated,
       }),
     })

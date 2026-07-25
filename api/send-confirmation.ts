@@ -23,11 +23,15 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY
 // to something like "Luna's Bouquet <orders@lunasbouquet.com>".
 const FROM = process.env.ORDER_FROM_EMAIL || "Luna's Bouquet <onboarding@resend.dev>"
 
+// An arrangement can arrive either as a plain string (older callers) or as
+// { label, delivery } so the email can show the delivery date.
+type Arrangement = string | { label?: string; delivery?: string }
+
 type Payload = {
   customerName?: string
   customerEmail?: string
   recipientName?: string
-  arrangements?: string[]
+  arrangements?: Arrangement[]
   estimatedTotal?: number
 }
 
@@ -39,10 +43,27 @@ function escapeHtml(s: string): string {
 
 function emailHtml(p: Payload): string {
   const first = (p.customerName || 'there').trim().split(' ')[0]
-  const items = (p.arrangements || []).map((a) => `<li>${escapeHtml(a)}</li>`).join('')
+  // "Delivered Fri, May 8" → "Fri, May 8, between 12–4pm"
+  const arrangements = p.arrangements ?? []
+  let anyDated = false
+  const items = arrangements
+    .map((a) => {
+      const label = typeof a === 'string' ? a : (a.label ?? '')
+      const deliveryRaw = typeof a === 'string' ? '' : (a.delivery ?? '')
+      const date = deliveryRaw.replace(/^Delivered\s+/i, '').trim()
+      if (date && !/first friday/i.test(date)) {
+        anyDated = true
+        return `<li style="margin-bottom:6px;">${escapeHtml(label)}<br><span style="color:#6e6153;font-size:15px;">Delivered ${escapeHtml(date)}, between 12&ndash;4pm</span></li>`
+      }
+      return `<li style="margin-bottom:6px;">${escapeHtml(label)}</li>`
+    })
+    .join('')
   const total = p.estimatedTotal
     ? `$${p.estimatedTotal}`
     : 'to be confirmed'
+  const deliveryNote = anyDated
+    ? 'We deliver on the date above, between 12 and 4pm.'
+    : ''
   // Inline styles only — email clients strip <style> and external CSS. Brand colors from
   // the site: plum #3a2130, gold #a97c24, rosewood #a8465a, ivory #f6f1e7.
   return `<!doctype html>
@@ -69,6 +90,7 @@ function emailHtml(p: Payload): string {
           </table>
         </td></tr>
         <tr><td style="padding:22px 40px 4px;font-size:15px;line-height:1.6;color:#6e6153;">
+          ${deliveryNote ? `<p style="margin:0 0 10px;color:#3a2130;"><strong>${deliveryNote}</strong></p>` : ''}
           <p style="margin:0;">No payment is due yet — Ahnaleigh arranges payment by Venmo, Zelle, check, or cash after confirming your order. Please allow 48 hours.</p>
         </td></tr>
         <tr><td style="padding:24px 40px 40px;text-align:center;">
