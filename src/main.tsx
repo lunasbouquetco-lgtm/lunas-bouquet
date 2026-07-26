@@ -9,6 +9,7 @@ import About from './pages/About.tsx'
 import Order from './pages/Order.tsx'
 import Contact from './pages/Contact.tsx'
 import NotFound from './pages/NotFound.tsx'
+import ServiceArea from './pages/ServiceArea.tsx'
 import AdminLayout from './pages/admin/AdminLayout.tsx'
 import Dashboard from './pages/admin/Dashboard.tsx'
 import AdminOrders from './pages/admin/Orders.tsx'
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
       { path: 'about', element: <About /> },
       { path: 'order', element: <Order /> },
       { path: 'contact', element: <Contact /> },
+      { path: 'flower-delivery/:slug', element: <ServiceArea /> },
       { path: '*', element: <NotFound /> },
     ],
   },

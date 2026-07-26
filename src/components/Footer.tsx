@@ -2,6 +2,7 @@ import InstagramIcon from '@/components/InstagramIcon'
 import { Link } from 'react-router-dom'
 import { Mail } from 'lucide-react'
 import markIvory from '@/assets/mark-ivory.png'
+import { SERVICE_AREAS } from '@/lib/serviceAreas'
 
 export default function Footer() {
   return (
@@ -15,12 +16,19 @@ export default function Footer() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-14 gap-y-3">
+          <div className="grid grid-cols-2 gap-x-14 gap-y-3 sm:grid-cols-3">
             <FooterCol title="Explore">
               <FooterLink to="/bouquets">Bouquets</FooterLink>
               <FooterLink to="/about">Our Story</FooterLink>
               <FooterLink to="/order">Place an Order</FooterLink>
               <FooterLink to="/contact">Contact</FooterLink>
+            </FooterCol>
+            <FooterCol title="Delivery areas">
+              {SERVICE_AREAS.map((a) => (
+                <FooterLink key={a.slug} to={`/flower-delivery/${a.slug}`}>
+                  {a.city}
+                </FooterLink>
+              ))}
             </FooterCol>
             <FooterCol title="Reach us">
               <a
