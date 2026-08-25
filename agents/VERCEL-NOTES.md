@@ -49,3 +49,40 @@ by the API functions, but still need a redeploy to attach to a new deployment.
 New projects enable Vercel Authentication, which 302-redirects every visitor to a Vercel
 login. Fine for staging, fatal for a shop. Settings → Deployment Protection → Vercel
 Authentication → Disabled.
+
+## The daily cron that keeps Supabase awake
+
+`vercel.json` declares one cron job:
+
+    "crons": [{ "path": "/api/keepalive", "schedule": "0 12 * * *" }]
+
+It exists because Supabase's free tier pauses a project after 7 days with no API
+requests, which would take the order book offline during a quiet stretch between
+holidays. `api/keepalive.ts` runs a single head-only count against `orders` — enough
+activity to reset the clock, cheap enough to be free.
+
+Things that have bitten people with Vercel crons:
+
+- **Crons only run from production deployments on `main`.** A preview deployment
+  declaring a cron doesn't schedule anything. If the schedule looks missing, check you
+  actually deployed to production.
+- **Hobby plans allow daily crons only** (and 2 per account), and the time is
+  approximate — `0 12 * * *` means sometime inside that UTC hour, not on the minute. A
+  more frequent expression fails at deploy time with "Hobby accounts are limited to
+  daily cron jobs." Daily is all we need; the pause window is 7 days.
+- **Changing `crons` requires a deploy** to take effect, like everything else here.
+- **It's open unless you set `CRON_SECRET`.** Vercel's only documented way to
+  authenticate a cron is the `CRON_SECRET` env var, which it sends back as
+  `Authorization: Bearer <secret>`. Guarding on any other header would 401 the real
+  cron and fail silently at the one job this exists to do, so with no secret set the
+  endpoint answers anyone — it returns `{ ok: true }` and nothing about the orders.
+  To harden it: add `CRON_SECRET` in Vercel → Settings → Environment Variables, then
+  redeploy. Testing by hand:
+
+      curl -s https://lunasbouquet.com/api/keepalive
+      # with a secret set:
+      curl -s -H "Authorization: Bearer $CRON_SECRET" https://lunasbouquet.com/api/keepalive
+
+- **A failure shows up in Vercel → Cron Jobs**, which is the only place a silent
+  Supabase problem would otherwise surface. The endpoint returns 500 on a database
+  error on purpose, so a broken database makes noise there.

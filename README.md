@@ -111,6 +111,29 @@ Two migrations, already applied, in `supabase/migrations/`:
   orders, with gate codes on the recipient).
 - `002_events.sql` — the events dashboard.
 
+### Keeping the database awake
+
+Supabase's free tier **pauses a project after 7 days with no API requests**, and a
+paused project takes the whole order book offline until someone restores it from the
+dashboard. Luna's is seasonal — long quiet stretches between holidays are normal — so
+customer traffic can't be trusted to keep it alive.
+
+A daily Vercel cron handles it: `vercel.json` calls `/api/keepalive` once a day, which
+runs one trivial count query against `orders`. It lives in the repo, costs nothing, and
+doesn't depend on anyone's laptop being on. Nothing to maintain; if you want to check on
+it, Vercel → the project → **Cron Jobs** shows the last runs.
+
+Two things worth knowing:
+- It **prevents** a pause, it can't undo one. If the project is already paused, restore
+  it in the Supabase dashboard first, then the cron keeps it up from there.
+- Vercel's cron only exists on deployments built from `main`, so it starts working with
+  the first deploy after this change.
+- The endpoint answers `{ ok: true }` and nothing else — no order data. If you'd rather
+  lock it down entirely, set a `CRON_SECRET` env var in Vercel and redeploy; Vercel then
+  sends it with every cron call and anyone without it gets a 401. Optional.
+
+Details and the gotchas live in `agents/VERCEL-NOTES.md`.
+
 **To change the database structure:** write a new numbered migration file, then paste
 it into Supabase → SQL Editor → Run. Two hard-won rules:
 1. **Clear the editor completely (Cmd+A, Delete) before pasting**, and make sure nothing
