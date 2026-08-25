@@ -17,7 +17,9 @@ Live at **https://lunasbouquet.com**.
   gate codes), and an Events revenue dashboard with charts. Not linked from the public
   site.
 - **When someone orders:** it saves to the database, emails Annie (Web3Forms), and
-  emails the customer a branded confirmation (Resend).
+  emails the customer a branded confirmation (Resend). The email to Annie goes out
+  **even if the database write fails** — flagged `[NOT SAVED]` — so an order is never
+  lost to a database problem.
 
 **Stack:** Vite + React + TypeScript + Tailwind. Database + admin API on Supabase.
 Hosted on Vercel. Built so it can be edited in Lovable later.
@@ -123,11 +125,15 @@ runs one trivial count query against `orders`. It lives in the repo, costs nothi
 doesn't depend on anyone's laptop being on. Nothing to maintain; if you want to check on
 it, Vercel → the project → **Cron Jobs** shows the last runs.
 
-Two things worth knowing:
+Worth knowing:
 - It **prevents** a pause, it can't undo one. If the project is already paused, restore
   it in the Supabase dashboard first, then the cron keeps it up from there.
 - Vercel's cron only exists on deployments built from `main`, so it starts working with
   the first deploy after this change.
+- **If the check fails, Annie gets an email** (via Resend) telling her the database is
+  down and how to restore it. That's the point of the whole thing: a pause used to be
+  invisible until someone noticed the admin wouldn't load. Add `ALERT_EMAIL` in Vercel
+  (comma-separated) to send it to more than one person.
 - The endpoint answers `{ ok: true }` and nothing else — no order data. If you'd rather
   lock it down entirely, set a `CRON_SECRET` env var in Vercel and redeploy; Vercel then
   sends it with every cron call and anyone without it gets a 401. Optional.

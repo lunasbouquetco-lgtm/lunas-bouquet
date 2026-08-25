@@ -83,6 +83,12 @@ Things that have bitten people with Vercel crons:
       # with a secret set:
       curl -s -H "Authorization: Bearer $CRON_SECRET" https://lunasbouquet.com/api/keepalive
 
-- **A failure shows up in Vercel → Cron Jobs**, which is the only place a silent
-  Supabase problem would otherwise surface. The endpoint returns 500 on a database
-  error on purpose, so a broken database makes noise there.
+- **A failure emails Annie and returns 500.** The email (Resend, same key as the order
+  confirmation) is the real alarm; the 500 in Vercel → Cron Jobs is where you look
+  second. Recipients come from `ALERT_EMAIL` (comma-separated, defaults to
+  `lunasbouquet.co@gmail.com`). With no `RESEND_API_KEY` set it just skips the email
+  rather than failing.
+- **The alert has a 12-hour in-memory cooldown.** There's nowhere durable to record the
+  last send — the database is the thing that's broken — so it's per-instance. The cron
+  runs daily, well outside the window, so a real alert is never suppressed; the cooldown
+  only exists to stop a repeatedly-hit endpoint from flooding an inbox.

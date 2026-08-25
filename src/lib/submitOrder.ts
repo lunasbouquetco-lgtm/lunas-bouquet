@@ -44,26 +44,42 @@ export async function submitOrder(
   // exists. place_order() does the find-or-create server-side and returns only the new
   // order id. It also protects a saved gate code from being blanked by a repeat order
   // that left the field empty.
+  //
+  // If this fails, we do NOT give up on the order — see step 2. A database that's
+  // unreachable (Supabase's free tier pauses after 7 days idle) used to return early
+  // here, which meant Annie never got the email and the order vanished. Losing an
+  // order is far worse than losing the record of one.
+  let savedToDatabase = false
+  let databaseError = ''
   if (supabase) {
-    const { error } = await supabase.rpc('place_order', {
-      p_customer_name: input.customerName,
-      p_customer_email: input.customerEmail,
-      p_customer_phone: input.customerPhone,
-      p_recipient_name: input.recipientName,
-      p_recipient_address: input.recipientAddress,
-      p_gate_code: input.gateCode || '',
-      p_arrangements: arrangementLabels,
-      p_custom_details: input.customDetails || '',
-      p_card_message: input.cardMessage || '',
-      p_delivery_instructions: input.deliveryInstructions || '',
-      p_estimated_total: estimated,
-    })
-    if (error) {
-      return { ok: false, error: error.message }
+    try {
+      const { error } = await supabase.rpc('place_order', {
+        p_customer_name: input.customerName,
+        p_customer_email: input.customerEmail,
+        p_customer_phone: input.customerPhone,
+        p_recipient_name: input.recipientName,
+        p_recipient_address: input.recipientAddress,
+        p_gate_code: input.gateCode || '',
+        p_arrangements: arrangementLabels,
+        p_custom_details: input.customDetails || '',
+        p_card_message: input.cardMessage || '',
+        p_delivery_instructions: input.deliveryInstructions || '',
+        p_estimated_total: estimated,
+      })
+      if (error) databaseError = error.message
+      else savedToDatabase = true
+    } catch (err) {
+      // A paused or unreachable project throws rather than returning an error object.
+      databaseError = err instanceof Error ? err.message : 'database unreachable'
     }
   }
 
   // 2) Email Annie via Web3Forms so she sees the order right away.
+  //
+  // This runs whether or not step 1 worked, and it is the safety net: as long as this
+  // email lands, the order is not lost, even with the database down. When the save
+  // failed, the email says so loudly so Annie knows this one isn't in the order book.
+  let emailedAnnie = false
   if (WEB3FORMS_KEY) {
     try {
       const res = await fetch('https://api.web3forms.com/submit', {
@@ -71,9 +87,16 @@ export async function submitOrder(
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
           access_key: WEB3FORMS_KEY,
-          subject: `New Luna's Bouquet order — ${input.customerName}`,
+          subject: savedToDatabase
+            ? `New Luna's Bouquet order — ${input.customerName}`
+            : `[NOT SAVED — action needed] New order — ${input.customerName}`,
           from_name: "Luna's Bouquet website",
           replyto: input.customerEmail,
+          ...(savedToDatabase
+            ? {}
+            : {
+                '⚠️ Order book': `This order did NOT save to the database, so it is NOT in the admin. Keep this email — it is the only copy. (${databaseError || 'database unreachable'})`,
+              }),
           'Customer': input.customerName,
           'Phone': input.customerPhone,
           'Email': input.customerEmail,
@@ -88,14 +111,19 @@ export async function submitOrder(
         }),
       })
       const json = await res.json()
-      if (!json.success && !supabase) {
-        // If Supabase isn't set up, the email is our only channel — surface failure.
-        return { ok: false, error: 'Could not send your order. Please try again.' }
-      }
+      emailedAnnie = Boolean(json.success)
     } catch {
-      if (!supabase) {
-        return { ok: false, error: 'Could not send your order. Please try again.' }
-      }
+      emailedAnnie = false
+    }
+  }
+
+  // The order is accepted if it landed anywhere Annie will see it. Only when BOTH the
+  // database and the email failed has the order truly gone nowhere — that, and only
+  // that, is worth showing the customer an error and asking them to try again.
+  if (!savedToDatabase && !emailedAnnie) {
+    return {
+      ok: false,
+      error: 'We could not send your order right now. Please try again, or email lunasbouquet.co@gmail.com.',
     }
   }
 

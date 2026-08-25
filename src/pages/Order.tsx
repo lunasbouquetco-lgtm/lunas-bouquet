@@ -86,7 +86,14 @@ export default function Order() {
     setServerError('')
     if (!validate()) return
     setStatus('submitting')
-    const res = await submitOrder({ ...form, selection })
+    // Belt and braces: submitOrder handles its own failures, but an unexpected throw
+    // here would otherwise leave the button spinning forever with no way out.
+    let res: { ok: boolean; error?: string }
+    try {
+      res = await submitOrder({ ...form, selection })
+    } catch {
+      res = { ok: false, error: 'Something went wrong. Please try again.' }
+    }
     if (res.ok) {
       setStatus('success')
       window.scrollTo({ top: 0, behavior: 'smooth' })
