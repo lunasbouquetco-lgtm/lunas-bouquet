@@ -121,7 +121,7 @@ export const setOrderStatus = (id: string, status: OrderStatus) =>
 
 export const updateOrder = (
   id: string,
-  patch: Partial<Pick<Order, 'card_message' | 'delivery_instructions'>> & {
+  patch: Partial<Pick<Order, 'card_message' | 'delivery_instructions' | 'estimated_total'>> & {
     admin_notes?: string
   }
 ) =>

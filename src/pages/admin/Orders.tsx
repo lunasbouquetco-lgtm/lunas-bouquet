@@ -130,11 +130,20 @@ function OrderCard({
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [card, setCard] = useState(o.card_message ?? '')
   const [instr, setInstr] = useState(o.delivery_instructions ?? '')
+  // Held as a string so the field can sit empty while Annie is mid-type; whole dollars
+  // only, because estimated_total is an integer column.
+  const [total, setTotal] = useState(o.estimated_total ? String(o.estimated_total) : '')
 
   async function save() {
     setBusy(o.id)
     try {
-      await updateOrder(o.id, { card_message: card, delivery_instructions: instr })
+      await updateOrder(o.id, {
+        card_message: card,
+        delivery_instructions: instr,
+        // An emptied field means "no total yet", which the column stores as 0 and the
+        // card reads back as "Quote".
+        estimated_total: Number(total) || 0,
+      })
       setEditing(false)
       onChanged()
     } catch (e) {
@@ -172,9 +181,26 @@ function OrderCard({
         )}
         <span className="ml-auto flex items-center gap-4">
           <span className="font-ui text-sm text-muted">{formatDate(o.created_at)}</span>
-          <span className="font-display text-xl text-rosewood">
-            {o.estimated_total ? `$${o.estimated_total}` : 'Quote'}
-          </span>
+          {editing ? (
+            <label className="flex items-center gap-2">
+              <span className="label text-[0.56rem] text-muted">Total</span>
+              <span className="flex items-center rounded-sm border border-edge bg-ivory pl-2 focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/20">
+                <span className="font-display text-xl text-rosewood">$</span>
+                <input
+                  value={total}
+                  onChange={(e) => setTotal(e.target.value.replace(/[^\d]/g, ''))}
+                  inputMode="numeric"
+                  placeholder="0"
+                  aria-label="Order total in dollars"
+                  className="w-20 bg-transparent py-1 pr-2 font-display text-xl text-rosewood placeholder:text-muted/50 focus:outline-none"
+                />
+              </span>
+            </label>
+          ) : (
+            <span className="font-display text-xl text-rosewood">
+              {o.estimated_total ? `$${o.estimated_total}` : 'Quote'}
+            </span>
+          )}
         </span>
       </div>
 
@@ -246,6 +272,7 @@ function OrderCard({
               onClick={() => {
                 setCard(o.card_message ?? '')
                 setInstr(o.delivery_instructions ?? '')
+                setTotal(o.estimated_total ? String(o.estimated_total) : '')
                 setEditing(false)
               }}
               className="label inline-flex items-center gap-1.5 rounded-full border border-edge px-4 py-2 text-[0.58rem] text-muted transition-colors hover:border-gold hover:text-gold"
