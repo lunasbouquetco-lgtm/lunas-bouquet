@@ -1,5 +1,36 @@
 # Vercel notes
 
+## Don't trust the Vercel CLI in this folder
+
+The live site runs in a Vercel project under **Annie's** account. Christine's CLI token
+(`christine-1002`) cannot see it, so nothing the CLI tells you here describes production.
+
+This bit us on 2026-09-07. The folder had a `.vercel/project.json` linking it to a
+*different*, long-dead `lunas-bouquet` project in Christine's own account — last deployed
+46 days earlier, serving `lunas-bouquet.vercel.app`, which 404s on `/api/keepalive` while
+the live `www.lunasbouquet.com` returns 200. Two ways that misleads you:
+
+- `vercel ls` shows one ancient deployment no matter what has actually shipped, so a fix
+  that deployed fine looks like it never went out.
+- `vercel deploy` from this folder would have shipped to the dead project — a build that
+  succeeds, a URL that works, and nothing reaching the real site.
+
+That `.vercel` folder has been deleted. If a `vercel` command asks you to link a project,
+say no; you are in the wrong tool.
+
+**Deploy by pushing to GitHub `main`.** That is the only path to production.
+
+**Verify from the outside, not from the CLI.** Fetch the live site and look for something
+only the new commit could produce — e.g. grep the built bundle for a string the commit
+introduced:
+
+    curl -sL https://www.lunasbouquet.com/ | grep -oE '/assets/[A-Za-z0-9._-]+\.js'
+    curl -sL https://www.lunasbouquet.com/assets/index-XXXX.js | grep -c "some new string"
+
+For a server-side change (anything in `api/`) there is no bundle to grep — the only real
+check is exercising the endpoint, which for the confirmation email means placing a test
+order and then deleting it from the admin order book.
+
 ## vercel.json takes no comments
 
 Vercel validates `vercel.json` against a strict schema and rejects unknown keys. A
