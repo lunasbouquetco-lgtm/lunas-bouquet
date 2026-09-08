@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Loader2, Pencil, Trash2, Check, X, ArrowUpDown } from 'lucide-react'
 import {
@@ -133,6 +133,17 @@ function OrderCard({
   // Held as a string so the field can sit empty while Annie is mid-type; whole dollars
   // only, because estimated_total is an integer column.
   const [total, setTotal] = useState(o.estimated_total ? String(o.estimated_total) : '')
+  // Clicking the amount opens the editor with the cursor already in the total, so the
+  // number can be typed straight over the old one.
+  const totalRef = useRef<HTMLInputElement>(null)
+  const [focusTotal, setFocusTotal] = useState(false)
+
+  useEffect(() => {
+    if (!editing || !focusTotal) return
+    totalRef.current?.focus()
+    totalRef.current?.select()
+    setFocusTotal(false)
+  }, [editing, focusTotal])
 
   async function save() {
     setBusy(o.id)
@@ -187,6 +198,7 @@ function OrderCard({
               <span className="flex items-center rounded-sm border border-edge bg-ivory pl-2 focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/20">
                 <span className="font-display text-xl text-rosewood">$</span>
                 <input
+                  ref={totalRef}
                   value={total}
                   onChange={(e) => setTotal(e.target.value.replace(/[^\d]/g, ''))}
                   inputMode="numeric"
@@ -197,9 +209,17 @@ function OrderCard({
               </span>
             </label>
           ) : (
-            <span className="font-display text-xl text-rosewood">
+            <button
+              type="button"
+              onClick={() => {
+                setFocusTotal(true)
+                setEditing(true)
+              }}
+              title="Set the order total"
+              className="font-display text-xl text-rosewood underline decoration-gold/40 underline-offset-4 transition-colors hover:text-rosewood-dark hover:decoration-gold"
+            >
               {o.estimated_total ? `$${o.estimated_total}` : 'Quote'}
-            </span>
+            </button>
           )}
         </span>
       </div>
