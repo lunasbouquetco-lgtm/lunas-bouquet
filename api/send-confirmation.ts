@@ -94,7 +94,7 @@ function emailHtml(p: Payload): string {
           <p style="margin:0;">No payment is due yet — Ahnaleigh arranges payment by Venmo, Zelle, check, or cash after confirming your order. Please allow 48 hours.</p>
         </td></tr>
         <tr><td style="padding:24px 40px 40px;text-align:center;">
-          <p style="margin:0;font-size:13px;color:#a97c24;">lunasbouquet.com &middot; @lunas_bouquet12</p>
+          <p style="margin:0;font-size:13px;color:#a97c24;"><a href="https://lunasbouquet.com" style="color:#a97c24;text-decoration:none;">lunasbouquet.com</a> &middot; <a href="https://instagram.com/lunas_bouquet12" style="color:#a97c24;text-decoration:none;">@lunas_bouquet12</a></p>
         </td></tr>
       </table>
     </td></tr>
