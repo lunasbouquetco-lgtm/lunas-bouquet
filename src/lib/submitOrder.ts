@@ -20,7 +20,10 @@ export type OrderInput = {
   website?: string // honeypot — must stay empty
 }
 
-const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY as string | undefined
+// Trimmed because the value in Vercel carries a trailing newline, and Web3Forms answers
+// a key with a newline on it with a 400. That failed silently: the order still saved and
+// the customer still saw the thank-you, but Annie's email never went out.
+const WEB3FORMS_KEY = (import.meta.env.VITE_WEB3FORMS_KEY as string | undefined)?.trim()
 
 export async function submitOrder(
   input: OrderInput
