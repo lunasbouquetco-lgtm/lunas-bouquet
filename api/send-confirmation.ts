@@ -1,5 +1,6 @@
 /// <reference types="node" />
-// Emails the CUSTOMER a confirmation after they place an order.
+// Emails the CUSTOMER a confirmation after they place an order, and sends Christine her
+// own notice of the same order.
 //
 // Annie's own notification still goes out via Web3Forms from the browser (unchanged).
 // This is the second email — the one to the buyer — and it goes through Resend, which
@@ -9,6 +10,9 @@
 // soft { sent: false } and the order flow carries on untouched. So shipping this changes
 // nothing for customers until Christine adds the key and verifies the domain. See
 // agents/EMAIL-SETUP.md.
+//
+// Christine's notice exists because Annie doesn't always check her inbox and Web3Forms
+// once failed silently for weeks. It rides on Resend so it shares nothing with that path.
 
 type Req = { method?: string; body?: unknown }
 type Res = {
@@ -22,6 +26,8 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY
 // only email the account owner. Once lunasbouquet.com is verified, set ORDER_FROM_EMAIL
 // to something like "Luna's Bouquet <orders@lunasbouquet.com>".
 const FROM = process.env.ORDER_FROM_EMAIL || "Luna's Bouquet <onboarding@resend.dev>"
+// Comma-separated, so another address can be added in Vercel without a code change.
+const NOTIFY_EMAIL = process.env.ORDER_NOTIFY_EMAIL || 'christineannreichenbach@gmail.com'
 
 // An arrangement can arrive either as a plain string (older callers) or as
 // { label, delivery } so the email can show the delivery date.
@@ -102,6 +108,50 @@ function emailHtml(p: Payload): string {
 </body></html>`
 }
 
+function arrangementLabel(a: Arrangement): string {
+  const label = typeof a === 'string' ? a : (a.label ?? '')
+  const delivery = typeof a === 'string' ? '' : (a.delivery ?? '')
+  return delivery ? `${label} (${delivery})` : label
+}
+
+function notifyHtml(p: Payload): string {
+  const rows = [
+    ['Customer', p.customerName || '—'],
+    ['Email', p.customerEmail || '—'],
+    ['For', p.recipientName || '—'],
+    ['Arrangements', (p.arrangements ?? []).map(arrangementLabel).join(', ') || '—'],
+    ['Estimated total', p.estimatedTotal ? `$${p.estimatedTotal}` : 'Quoted separately'],
+  ]
+  return `<!doctype html>
+<html><body style="font-family:Georgia,'Times New Roman',serif;color:#2a2420;font-size:16px;line-height:1.6;">
+  <p style="margin:0 0 12px;">A new order just came in on lunasbouquet.com.</p>
+  ${rows.map(([k, v]) => `<p style="margin:0;"><strong>${k}:</strong> ${escapeHtml(v)}</p>`).join('')}
+  <p style="margin:16px 0 0;"><a href="https://www.lunasbouquet.com/admin" style="color:#a8465a;">Open the order book</a></p>
+</body></html>`
+}
+
+// Never throws: a failed notice must not change what the customer's confirmation does.
+async function notifyChristine(p: Payload): Promise<boolean> {
+  try {
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: FROM,
+        to: NOTIFY_EMAIL.split(',').map((a) => a.trim()).filter(Boolean),
+        subject: `New Luna's Bouquet order: ${p.customerName || 'a customer'}`,
+        html: notifyHtml(p),
+      }),
+    })
+    return r.ok
+  } catch {
+    return false
+  }
+}
+
 export default async function handler(req: Req, res: Res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Use POST.' })
@@ -121,6 +171,8 @@ export default async function handler(req: Req, res: Res) {
     return
   }
 
+  const notified = await notifyChristine(body)
+
   try {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -137,11 +189,15 @@ export default async function handler(req: Req, res: Res) {
     })
     if (!r.ok) {
       const text = await r.text()
-      res.status(502).json({ sent: false, error: text.slice(0, 300) })
+      res.status(502).json({ sent: false, notified, error: text.slice(0, 300) })
       return
     }
-    res.status(200).json({ sent: true })
+    res.status(200).json({ sent: true, notified })
   } catch (err) {
-    res.status(500).json({ sent: false, error: err instanceof Error ? err.message : 'send failed' })
+    res.status(500).json({
+      sent: false,
+      notified,
+      error: err instanceof Error ? err.message : 'send failed',
+    })
   }
 }

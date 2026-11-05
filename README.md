@@ -17,7 +17,9 @@ Live at **https://lunasbouquet.com**.
   gate codes), and an Events revenue dashboard with charts. Not linked from the public
   site.
 - **When someone orders:** it saves to the database, emails Annie (Web3Forms), and
-  emails the customer a branded confirmation (Resend). The email to Annie goes out
+  emails the customer a branded confirmation (Resend). Christine also gets her own
+  notice through Resend (`ORDER_NOTIFY_EMAIL` overrides the address in
+  `api/send-confirmation.ts`), separate from Web3Forms. The email to Annie goes out
   **even if the database write fails** — flagged `[NOT SAVED]` — so an order is never
   lost to a database problem.
 
